@@ -1,9 +1,0 @@
-project:
-  output-dir: _docs
-
-website:
-  title: "AnalyzingNeuralTimeSeries-Python"
-  site-url: "https://agencyenterprise.github.io/AnalyzingNeuralTimeSeries-Python"
-  description: "Python Implementation of Code for ANTS book (Cohen, 2012, MIT Press)"
-  repo-branch: main
-  repo-url: "https://github.com/agencyenterprise/AnalyzingNeuralTimeSeries-Python"
