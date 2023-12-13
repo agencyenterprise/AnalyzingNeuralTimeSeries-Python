@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>AnalyzingNeuralTimeSeries-Python - Chapter 30</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="AnalyzingNeuralTimeSeries-Python - Chapter 30">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://agencyenterprise.github.io/AnalyzingNeuralTimeSeries-Python/chapter30_files/figure-html/cell-3-output-1.png">
+<meta property="og:site-name" content="AnalyzingNeuralTimeSeries-Python">
+<meta property="og:image:height" content="590">
+<meta property="og:image:width" content="989">
+<meta name="twitter:title" content="AnalyzingNeuralTimeSeries-Python - Chapter 30">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://agencyenterprise.github.io/AnalyzingNeuralTimeSeries-Python/chapter30_files/figure-html/cell-3-output-1.png">
+<meta name="twitter:image-height" content="590">
+<meta name="twitter:image-width" content="989">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">AnalyzingNeuralTimeSeries-Python</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter30.html">Chapter 30</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AnalyzingNeuralTimeSeries-Python</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 2</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4a</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4b</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4c</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter22.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter23.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter25.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter26.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter27.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter28.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter29.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter30.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Chapter 30</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter31.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 31</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter33.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 33</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter34.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 34</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#analyzing-neural-time-series-data" id="toc-analyzing-neural-time-series-data" class="nav-link active" data-scroll-target="#analyzing-neural-time-series-data">Analyzing Neural Time Series Data</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/agencyenterprise/AnalyzingNeuralTimeSeries-Python/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Chapter 30</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="analyzing-neural-time-series-data" class="level3">
+<h3 class="anchored" data-anchor-id="analyzing-neural-time-series-data">Analyzing Neural Time Series Data</h3>
+<p>Python code for Chapter 30 – converted from original Matlab by AE Studio (and ChatGPT)<br>
+Original Matlab code by Mike X Cohen</p>
+<p>This code accompanies the book, titled “Analyzing Neural Time Series Data” (MIT Press).<br>
+Using the code without following the book may lead to confusion, incorrect data analyses, and misinterpretations of results.<br>
+Mike X Cohen and AE Studio assume no responsibility for inappropriate or incorrect use of this code.</p>
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import necessary libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.io <span class="im">import</span> loadmat</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.fft <span class="im">import</span> fft, ifft</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.1</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>EEG <span class="op">=</span> loadmat(<span class="st">'../data/sampleEEGdata.mat'</span>)[<span class="st">'EEG'</span>][<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Define channel to plot</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>channel2plot <span class="op">=</span> <span class="st">'O1'</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Wavelet parameters</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>freq2plot <span class="op">=</span> <span class="dv">25</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Other wavelet parameters</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>], <span class="dv">1</span><span class="op">/</span>EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>half_of_wavelet_size <span class="op">=</span> (<span class="bu">len</span>(time)<span class="op">-</span><span class="dv">1</span>)<span class="op">//</span><span class="dv">2</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>n_wavelet <span class="op">=</span> <span class="bu">len</span>(time)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>n_data <span class="op">=</span> EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>]<span class="op">*</span>EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>n_convolution <span class="op">=</span> n_wavelet <span class="op">+</span> n_data <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Find sensor index</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>sensoridx <span class="op">=</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="st">'labels'</span>]<span class="op">==</span>channel2plot</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># FFT of data</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>fft_EEG <span class="op">=</span> fft(EEG[<span class="st">'data'</span>][sensoridx, :, :].flatten(<span class="st">'F'</span>), n_convolution)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Create wavelet and get its FFT</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>wavelet <span class="op">=</span> np.exp(<span class="dv">2</span><span class="op">*</span><span class="ot">1j</span><span class="op">*</span>np.pi<span class="op">*</span>freq2plot<span class="op">*</span>time) <span class="op">*</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>(<span class="dv">4</span><span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>freq2plot))<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>fft_wavelet <span class="op">=</span> fft(wavelet, n_convolution)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>convolution_result <span class="op">=</span> ifft(fft_wavelet <span class="op">*</span> fft_EEG, n_convolution)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>convolution_result <span class="op">=</span> convolution_result[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size]</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>convolution_result <span class="op">=</span> np.reshape(convolution_result, (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">211</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>plt.plot(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], np.real(convolution_result[:, <span class="dv">0</span>])) <span class="co"># Filtered signal from the first trial</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>), plt.ylabel(<span class="st">'Filtered signal amplitude'</span>)</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1000</span>])</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="dv">50</span>, <span class="dv">50</span>])</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>plt.plot(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], np.<span class="bu">abs</span>(convolution_result[:, <span class="dv">0</span>])<span class="op">**</span><span class="dv">2</span>) <span class="co"># Power from the first trial</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>), plt.ylabel(<span class="st">'Power'</span>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1000</span>])</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="dv">0</span>, <span class="dv">3000</span>])</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter30_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.2</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>eeg <span class="op">=</span> loadmat(<span class="st">'../data/accumbens_eeg.mat'</span>)[<span class="st">'eeg'</span>][<span class="dv">0</span>]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>srate <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Wavelet parameters</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>freq2plot <span class="op">=</span> <span class="dv">70</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Other wavelet parameters</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>srate, <span class="dv">1</span><span class="op">/</span>srate)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>half_of_wavelet_size <span class="op">=</span> (<span class="bu">len</span>(time)<span class="op">-</span><span class="dv">1</span>)<span class="op">//</span><span class="dv">2</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>n_wavelet <span class="op">=</span> <span class="bu">len</span>(time)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>n_data <span class="op">=</span> <span class="bu">len</span>(eeg)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>n_convolution <span class="op">=</span> n_wavelet <span class="op">+</span> n_data <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># FFT of data</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>fft_EEG <span class="op">=</span> fft(eeg, n_convolution)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Create wavelet and get its FFT</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>wavelet <span class="op">=</span> np.exp(<span class="dv">2</span><span class="op">*</span><span class="ot">1j</span><span class="op">*</span>np.pi<span class="op">*</span>freq2plot<span class="op">*</span>time) <span class="op">*</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>(<span class="dv">4</span><span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>freq2plot))<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>fft_wavelet <span class="op">=</span> fft(wavelet, n_convolution)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>convolution_result <span class="op">=</span> ifft(fft_wavelet <span class="op">*</span> fft_EEG, n_convolution)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>convolution_result <span class="op">=</span> convolution_result[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size]</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>eegtime <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="bu">len</span>(eeg)) <span class="op">/</span> srate</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">311</span>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>plt.plot(eegtime, eeg)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>), plt.ylabel(<span class="st">'Broadband signal amplitude'</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">312</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>plt.plot(eegtime, np.real(convolution_result)) <span class="co"># Filtered signal from the first trial</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>), plt.ylabel(<span class="st">'Filtered signal amplitude'</span>)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">313</span>)</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>plt.plot(eegtime, np.<span class="bu">abs</span>(convolution_result)<span class="op">**</span><span class="dv">2</span>) <span class="co"># Power from the first trial</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>), plt.ylabel(<span class="st">'Power'</span>)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter30_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.3</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We will first test for cross-frequency coupling between two specific frequency bands</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>freq4phase <span class="op">=</span> <span class="dv">10</span>  <span class="co"># in Hz</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>freq4power <span class="op">=</span> <span class="dv">70</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Wavelet and FFT parameters</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>srate <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>srate, <span class="dv">1</span><span class="op">/</span>srate)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>half_of_wavelet_size <span class="op">=</span> (<span class="bu">len</span>(time)<span class="op">-</span><span class="dv">1</span>)<span class="op">//</span><span class="dv">2</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>n_wavelet <span class="op">=</span> <span class="bu">len</span>(time)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>n_data <span class="op">=</span> <span class="bu">len</span>(eeg)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>n_convolution <span class="op">=</span> n_wavelet <span class="op">+</span> n_data <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>fft_data <span class="op">=</span> fft(eeg, n_convolution)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Wavelet for phase and its FFT</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>wavelet4phase <span class="op">=</span> np.exp(<span class="dv">2</span><span class="op">*</span><span class="ot">1j</span><span class="op">*</span>np.pi<span class="op">*</span>freq4phase<span class="op">*</span>time) <span class="op">*</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>(<span class="dv">4</span><span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>freq4phase))<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>fft_wavelet4phase <span class="op">=</span> fft(wavelet4phase, n_convolution)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Wavelet for power and its FFT</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>wavelet4power <span class="op">=</span> np.exp(<span class="dv">2</span><span class="op">*</span><span class="ot">1j</span><span class="op">*</span>np.pi<span class="op">*</span>freq4power<span class="op">*</span>time) <span class="op">*</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>(<span class="dv">4</span><span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>freq4power))<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>fft_wavelet4power <span class="op">=</span> fft(wavelet4power, n_convolution)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Get phase values</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>convolution_result_fft <span class="op">=</span> ifft(fft_wavelet4phase <span class="op">*</span> fft_data, n_convolution)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>phase <span class="op">=</span> np.angle(convolution_result_fft[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size])</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Get power values (note: 'power' is a built-in function so we'll name this variable 'amp')</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>convolution_result_fft <span class="op">=</span> ifft(fft_wavelet4power <span class="op">*</span> fft_data, n_convolution)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>pwr <span class="op">=</span> np.<span class="bu">abs</span>(convolution_result_fft[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size])<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot power and phase</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">131</span>)</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>plt.plot(eegtime, phase)</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>plt.plot(eegtime, (pwr <span class="op">-</span> np.mean(pwr)) <span class="op">/</span> np.std(pwr), <span class="st">'r'</span>)</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>plt.legend([<span class="st">'10 Hz phase'</span>, <span class="st">'70 Hz power'</span>])</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="dv">4</span>, <span class="dv">6</span>])</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot power as a function of phase in polar space</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">132</span>, projection<span class="op">=</span><span class="st">'polar'</span>)</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>plt.polar(phase, pwr, <span class="st">'.'</span>)</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histogram of power over phase</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>n_hist_bins <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>phase_edges <span class="op">=</span> np.linspace(np.<span class="bu">min</span>(phase), np.<span class="bu">max</span>(phase), n_hist_bins <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>amp_by_phases <span class="op">=</span> np.zeros(n_hist_bins)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_hist_bins <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>    amp_by_phases[i] <span class="op">=</span> np.mean(pwr[(phase <span class="op">&gt;</span> phase_edges[i]) <span class="op">&amp;</span> (phase <span class="op">&lt;</span> phase_edges[i <span class="op">+</span> <span class="dv">1</span>])])</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">133</span>)</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>plt.bar(phase_edges[:<span class="op">-</span><span class="dv">1</span>], amp_by_phases, align<span class="op">=</span><span class="st">'edge'</span>, width<span class="op">=</span>np.diff(phase_edges)[<span class="dv">0</span>])</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span>np.pi, np.pi])</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>plt.xticks([<span class="op">-</span>np.pi, <span class="op">-</span>np.pi<span class="op">/</span><span class="dv">2</span>, <span class="dv">0</span>, np.pi<span class="op">/</span><span class="dv">2</span>, np.pi])</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="ss">f'Phase at </span><span class="sc">{</span>freq4phase<span class="sc">}</span><span class="ss"> Hz (rad.)'</span>)</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="ss">f'Power at </span><span class="sc">{</span>freq4power<span class="sc">}</span><span class="ss"> Hz'</span>)</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter30_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.4</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Phase bias is the phase time series without the negative half of the cycle</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>phase_bias <span class="op">=</span> phase[phase <span class="op">&gt;=</span> <span class="op">-</span>np.pi<span class="op">/</span><span class="dv">2</span>]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Power bias is the corresponding power time series</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>power_bias <span class="op">=</span> pwr[phase <span class="op">&gt;=</span> <span class="op">-</span>np.pi<span class="op">/</span><span class="dv">2</span>]</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot power as a function of phase in polar space</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">131</span>, projection<span class="op">=</span><span class="st">'polar'</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>plt.polar(phase, pwr, <span class="st">'.'</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'PAC = </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(np.<span class="bu">abs</span>(np.mean(pwr <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase))))<span class="sc">:.0f}</span><span class="ss">'</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">132</span>, projection<span class="op">=</span><span class="st">'polar'</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>plt.polar(phase, pwr <span class="op">*</span> <span class="dv">10</span>, <span class="st">'.'</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'PAC = </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(np.<span class="bu">abs</span>(np.mean(pwr <span class="op">*</span> <span class="dv">10</span> <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase))))<span class="sc">:.0f}</span><span class="ss">'</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">133</span>, projection<span class="op">=</span><span class="st">'polar'</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>plt.polar(phase_bias, power_bias, <span class="st">'.'</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'PAC = </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(np.<span class="bu">abs</span>(np.mean(power_bias <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase_bias))))<span class="sc">:.0f}</span><span class="ss">'</span>)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter30_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.5</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Observed cross-frequency coupling (note the similarity to Euler's formula)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>obsPAC <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(pwr <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase)))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>obsPAC_bias <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(power_bias <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase_bias)))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>num_iter <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>permutedPAC <span class="op">=</span> np.zeros((<span class="dv">2</span>, num_iter))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Permutation test</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_iter):</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Select random time point</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    random_timepoint <span class="op">=</span> np.random.choice(np.<span class="bu">round</span>(<span class="bu">len</span>(eeg) <span class="op">*</span> <span class="fl">0.8</span>).astype(<span class="bu">int</span>), <span class="dv">1</span>) <span class="op">+</span> np.<span class="bu">round</span>(<span class="bu">len</span>(eeg) <span class="op">*</span> <span class="fl">0.1</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    random_timepoint_bias <span class="op">=</span> np.random.choice(np.<span class="bu">round</span>(<span class="bu">len</span>(power_bias) <span class="op">*</span> <span class="fl">0.8</span>).astype(<span class="bu">int</span>), <span class="dv">1</span>) <span class="op">+</span> np.<span class="bu">round</span>(<span class="bu">len</span>(power_bias) <span class="op">*</span> <span class="fl">0.1</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Shuffle power</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    timeshiftedpwr <span class="op">=</span> np.concatenate((pwr[random_timepoint[<span class="dv">0</span>]:], pwr[:random_timepoint[<span class="dv">0</span>]]))</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    timeshiftedpwr_bias <span class="op">=</span> np.concatenate((power_bias[random_timepoint_bias[<span class="dv">0</span>]:], power_bias[:random_timepoint_bias[<span class="dv">0</span>]]))</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute PAC</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    permutedPAC[<span class="dv">0</span>, i] <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(timeshiftedpwr <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase)))</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    permutedPAC[<span class="dv">1</span>, i] <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(timeshiftedpwr_bias <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase_bias)))</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute PACz</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>pacz <span class="op">=</span> np.zeros(<span class="dv">2</span>)</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>pacz[<span class="dv">0</span>] <span class="op">=</span> (obsPAC <span class="op">-</span> np.mean(permutedPAC[<span class="dv">0</span>, :])) <span class="op">/</span> np.std(permutedPAC[<span class="dv">0</span>, :])</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>pacz[<span class="dv">1</span>] <span class="op">=</span> (obsPAC_bias <span class="op">-</span> np.mean(permutedPAC[<span class="dv">1</span>, :])) <span class="op">/</span> np.std(permutedPAC[<span class="dv">1</span>, :])</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">221</span>)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>plt.hist(permutedPAC[<span class="dv">0</span>, :], bins<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>plt.axvline(obsPAC, color<span class="op">=</span><span class="st">'m'</span>, linewidth<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>plt.legend([<span class="st">'Observed value'</span>, <span class="st">'Permuted values'</span>])</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Modulation strength'</span>), plt.ylabel(<span class="st">'Number of observations'</span>)</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'PAC_z = </span><span class="sc">{</span>pacz[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">222</span>)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>plt.hist(permutedPAC[<span class="dv">1</span>, :], bins<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>plt.axvline(obsPAC_bias, color<span class="op">=</span><span class="st">'m'</span>, linewidth<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>plt.legend([<span class="st">'Observed value'</span>, <span class="st">'Permuted values'</span>])</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Modulation strength'</span>), plt.ylabel(<span class="st">'Number of observations'</span>)</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'PAC_z = </span><span class="sc">{</span>pacz[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histogram of power over phase</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>n_hist_bins <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>phase_edges <span class="op">=</span> np.linspace(np.<span class="bu">min</span>(phase), np.<span class="bu">max</span>(phase), n_hist_bins <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>amp_by_phases <span class="op">=</span> np.zeros(n_hist_bins)</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_hist_bins <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>    amp_by_phases[i] <span class="op">=</span> np.mean(pwr[(phase <span class="op">&gt;</span> phase_edges[i]) <span class="op">&amp;</span> (phase <span class="op">&lt;</span> phase_edges[i <span class="op">+</span> <span class="dv">1</span>])])</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">223</span>)</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>plt.bar(phase_edges[:<span class="op">-</span><span class="dv">1</span>], amp_by_phases, align<span class="op">=</span><span class="st">'edge'</span>, width<span class="op">=</span>np.diff(phase_edges)[<span class="dv">0</span>])</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span>np.pi, np.pi])</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>plt.xticks([<span class="op">-</span>np.pi, <span class="op">-</span>np.pi<span class="op">/</span><span class="dv">2</span>, <span class="dv">0</span>, np.pi<span class="op">/</span><span class="dv">2</span>, np.pi])</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="ss">f'Phase at </span><span class="sc">{</span>freq4phase<span class="sc">}</span><span class="ss"> Hz (rad.)'</span>)</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="ss">f'Power at </span><span class="sc">{</span>freq4power<span class="sc">}</span><span class="ss"> Hz'</span>)</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histogram of power over phase bias</span></span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>phase_edges_bias <span class="op">=</span> np.linspace(np.<span class="bu">min</span>(phase_bias), np.<span class="bu">max</span>(phase_bias), n_hist_bins <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>amp_by_phases_bias <span class="op">=</span> np.zeros(n_hist_bins)</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_hist_bins <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>    amp_by_phases_bias[i] <span class="op">=</span> np.mean(power_bias[(phase_bias <span class="op">&gt;</span> phase_edges_bias[i]) <span class="op">&amp;</span> (phase_bias <span class="op">&lt;</span> phase_edges_bias[i <span class="op">+</span> <span class="dv">1</span>])])</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">224</span>)</span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>plt.bar(phase_edges_bias[:<span class="op">-</span><span class="dv">1</span>], amp_by_phases_bias, align<span class="op">=</span><span class="st">'edge'</span>, width<span class="op">=</span>np.diff(phase_edges_bias)[<span class="dv">0</span>])</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span>np.pi, np.pi])</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>plt.xticks([<span class="op">-</span>np.pi, <span class="op">-</span>np.pi<span class="op">/</span><span class="dv">2</span>, <span class="dv">0</span>, np.pi<span class="op">/</span><span class="dv">2</span>, np.pi])</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="ss">f'Phase at </span><span class="sc">{</span>freq4phase<span class="sc">}</span><span class="ss"> Hz (rad.)'</span>)</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="ss">f'Power at </span><span class="sc">{</span>freq4power<span class="sc">}</span><span class="ss"> Hz'</span>)</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter30_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.6</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the array to store permuted PAC values for three different permutation methods</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>permutedPAC <span class="op">=</span> np.zeros((<span class="dv">3</span>, num_iter))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Permutation tests</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_iter):</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Permutation method 1: select random time point</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    random_timepoint <span class="op">=</span> np.random.choice(np.<span class="bu">round</span>(<span class="bu">len</span>(eeg) <span class="op">*</span> <span class="fl">0.8</span>).astype(<span class="bu">int</span>), <span class="dv">1</span>) <span class="op">+</span> np.<span class="bu">round</span>(<span class="bu">len</span>(eeg) <span class="op">*</span> <span class="fl">0.1</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    timeshiftedpwr <span class="op">=</span> np.concatenate((pwr[random_timepoint[<span class="dv">0</span>]:], pwr[:random_timepoint[<span class="dv">0</span>]]))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    permutedPAC[<span class="dv">0</span>, i] <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(timeshiftedpwr <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase)))</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Permutation method 2: totally randomize power time series</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    permutedPAC[<span class="dv">1</span>, i] <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(pwr[np.random.permutation(<span class="bu">len</span>(pwr))] <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase)))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Permutation method 3: FFT-based power time series randomization</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> fft(pwr)  <span class="co"># compute FFT</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.<span class="bu">abs</span>(f)  <span class="co"># extract amplitudes</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    zphs <span class="op">=</span> np.cos(np.angle(f)) <span class="op">+</span> <span class="ot">1j</span> <span class="op">*</span> np.sin(np.angle(f))  <span class="co"># extract phases</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    powernew <span class="op">=</span> np.real(ifft(A <span class="op">*</span> zphs[np.random.permutation(<span class="bu">len</span>(zphs))]))  <span class="co"># recombine using randomized phases</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    powernew <span class="op">=</span> powernew <span class="op">-</span> np.<span class="bu">min</span>(powernew)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    permutedPAC[<span class="dv">2</span>, i] <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(powernew <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase)))</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute PACz and plot</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">8</span>))</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">2</span>, <span class="dv">3</span>, i <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot example power time series</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        plt.plot(eegtime, timeshiftedpwr)</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        plt.title(<span class="st">'H_0: Time-shifted'</span>)</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> i <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>        plt.plot(eegtime, pwr[np.random.permutation(<span class="bu">len</span>(pwr))])</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>        plt.title(<span class="st">'H_0: Randomized'</span>)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> i <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>        plt.plot(eegtime, powernew)</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>        plt.title(<span class="st">'H_0: FFT-derived randomization'</span>)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    plt.xlim([<span class="dv">0</span>, eegtime[<span class="op">-</span><span class="dv">1</span>]])</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    plt.ylim([np.<span class="bu">min</span>(pwr), np.<span class="bu">max</span>(pwr)])</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot null-hypothesis distribution</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">2</span>, <span class="dv">3</span>, i <span class="op">+</span> <span class="dv">4</span>)</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    pacz <span class="op">=</span> (obsPAC <span class="op">-</span> np.mean(permutedPAC[i, :])) <span class="op">/</span> np.std(permutedPAC[i, :])</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>    y, x <span class="op">=</span> np.histogram(permutedPAC[i, :], bins<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>    plt.bar(x[:<span class="op">-</span><span class="dv">1</span>], y, width<span class="op">=</span>np.diff(x), align<span class="op">=</span><span class="st">'edge'</span>)</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>    plt.axvline(obsPAC, color<span class="op">=</span><span class="st">'m'</span>, linewidth<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>    plt.legend([<span class="st">'Observed value'</span>, <span class="st">'Permuted values'</span>])</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">'Modulation strength'</span>), plt.ylabel(<span class="st">'Number of observations'</span>)</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f'PAC_z = </span><span class="sc">{</span>pacz<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter30_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.7</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the time points to plot</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>times2plot <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">200</span>, <span class="dv">1201</span>, <span class="dv">100</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>freq4phase <span class="op">=</span> <span class="dv">10</span>  <span class="co"># Hz for phase</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>freq4power <span class="op">=</span> <span class="dv">25</span>  <span class="co"># Hz for power</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>cfc_numcycles <span class="op">=</span> <span class="dv">3</span>  <span class="co"># number of cycles at phase-frequency</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>pacz <span class="op">=</span> np.zeros(<span class="bu">len</span>(times2plot))</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>itpc <span class="op">=</span> np.zeros(<span class="bu">len</span>(times2plot))</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert cfc times to indices</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>cfc_time_window <span class="op">=</span> cfc_numcycles <span class="op">*</span> (<span class="dv">1000</span> <span class="op">/</span> freq4phase)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>cfc_time_window_idx <span class="op">=</span> np.<span class="bu">round</span>(cfc_time_window <span class="op">/</span> (<span class="dv">1000</span> <span class="op">/</span> EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>])).astype(<span class="bu">int</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Other wavelet parameters</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>], <span class="dv">1</span><span class="op">/</span>EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>half_of_wavelet_size <span class="op">=</span> (<span class="bu">len</span>(time)<span class="op">-</span><span class="dv">1</span>)<span class="op">//</span><span class="dv">2</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>n_wavelet <span class="op">=</span> <span class="bu">len</span>(time)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>n_data <span class="op">=</span> EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>]<span class="op">*</span>EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>n_convolution <span class="op">=</span> n_wavelet <span class="op">+</span> n_data <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co"># FFT of scalp EEG data</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>fft_EEG <span class="op">=</span> fft(EEG[<span class="st">'data'</span>][sensoridx, :, :].flatten(<span class="st">'F'</span>), n_convolution)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> timei, timepoint <span class="kw">in</span> <span class="bu">enumerate</span>(times2plot):</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    cfc_centertime_idx <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(EEG[<span class="st">'times'</span>][<span class="dv">0</span>] <span class="op">-</span> timepoint))</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convolution for lower frequency phase</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    wavelet <span class="op">=</span> np.exp(<span class="dv">2</span> <span class="op">*</span> <span class="ot">1j</span> <span class="op">*</span> np.pi <span class="op">*</span> freq4phase <span class="op">*</span> time) <span class="op">*</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> (<span class="dv">4</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> freq4phase))<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    fft_wavelet <span class="op">=</span> fft(wavelet, n_convolution)</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    convolution_result <span class="op">=</span> ifft(fft_wavelet <span class="op">*</span> fft_EEG, n_convolution)</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>    convolution_result <span class="op">=</span> convolution_result[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size]</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>    lower_freq_phase <span class="op">=</span> np.reshape(convolution_result, (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convolution for upper frequency power</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>    wavelet <span class="op">=</span> np.exp(<span class="dv">2</span> <span class="op">*</span> <span class="ot">1j</span> <span class="op">*</span> np.pi <span class="op">*</span> freq4power <span class="op">*</span> time) <span class="op">*</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> (<span class="dv">4</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> freq4power))<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    fft_wavelet <span class="op">=</span> fft(wavelet, n_convolution)</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    convolution_result <span class="op">=</span> ifft(fft_wavelet <span class="op">*</span> fft_EEG, n_convolution)</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>    convolution_result <span class="op">=</span> convolution_result[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size]</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>    upper_freq_power <span class="op">=</span> np.reshape(convolution_result, (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract temporally localized power and phase</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>    power_ts <span class="op">=</span> np.<span class="bu">abs</span>(upper_freq_power[cfc_centertime_idx <span class="op">-</span> np.floor(cfc_time_window_idx<span class="op">/</span><span class="dv">2</span><span class="op">+</span><span class="fl">0.5</span>).astype(<span class="bu">int</span>):cfc_centertime_idx <span class="op">+</span> np.floor(cfc_time_window_idx<span class="op">/</span><span class="dv">2</span><span class="op">+</span><span class="fl">0.5</span>).astype(<span class="bu">int</span>) <span class="op">+</span> <span class="dv">1</span>, :])<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>    phase_ts <span class="op">=</span> np.angle(lower_freq_phase[cfc_centertime_idx <span class="op">-</span> np.floor(cfc_time_window_idx<span class="op">/</span><span class="dv">2</span><span class="op">+</span><span class="fl">0.5</span>).astype(<span class="bu">int</span>):cfc_centertime_idx <span class="op">+</span> np.floor(cfc_time_window_idx<span class="op">/</span><span class="dv">2</span><span class="op">+</span><span class="fl">0.5</span>).astype(<span class="bu">int</span>) <span class="op">+</span> <span class="dv">1</span>, :])</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute observed PAC</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>    obsPAC <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(power_ts.flatten(<span class="st">'F'</span>) <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase_ts.flatten(<span class="st">'F'</span>))))</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute lower frequency ITPC</span></span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>    itpc[timei] <span class="op">=</span> np.mean(np.<span class="bu">abs</span>(np.mean(np.exp(<span class="ot">1j</span> <span class="op">*</span> phase_ts), axis<span class="op">=</span><span class="dv">1</span>)))</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Permutation test</span></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>    permutedPAC <span class="op">=</span> np.zeros(num_iter)</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_iter):</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>        random_timepoint <span class="op">=</span> np.random.choice(np.<span class="bu">round</span>(cfc_time_window_idx <span class="op">*</span> <span class="fl">0.8</span>).astype(<span class="bu">int</span>), EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]) <span class="op">+</span> np.<span class="bu">round</span>(cfc_time_window_idx <span class="op">*</span> <span class="fl">0.1</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> triali <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>            power_ts[:, triali] <span class="op">=</span> np.roll(power_ts[:, triali], random_timepoint[triali])</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>        permutedPAC[i] <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(power_ts.flatten(<span class="st">'F'</span>) <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase_ts.flatten(<span class="st">'F'</span>))))</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>    pacz[timei] <span class="op">=</span> (obsPAC <span class="op">-</span> np.mean(permutedPAC)) <span class="op">/</span> np.std(permutedPAC)</span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">211</span>)</span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>plt.plot(times2plot, pacz, <span class="st">'-o'</span>, markerfacecolor<span class="op">=</span><span class="st">'w'</span>)</span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the z-value threshold for p=0.05, correcting for multiple comparisons</span></span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>zval <span class="op">=</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> (<span class="fl">0.05</span> <span class="op">/</span> <span class="bu">len</span>(times2plot)))</span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>plt.axhline(zval, color<span class="op">=</span><span class="st">'k'</span>, linestyle<span class="op">=</span><span class="st">':'</span>)</span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>plt.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>), plt.ylabel(<span class="st">'PAC_z'</span>)</span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'PAC_z at electrode </span><span class="sc">{</span>channel2plot<span class="sc">}</span><span class="ss"> between </span><span class="sc">{</span>freq4power<span class="sc">}</span><span class="ss"> Hz power and </span><span class="sc">{</span>freq4phase<span class="sc">}</span><span class="ss"> Hz phase'</span>)</span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Also plot ITPC for comparison</span></span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>plt.plot(times2plot, itpc, <span class="st">'-o'</span>, markerfacecolor<span class="op">=</span><span class="st">'w'</span>)</span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>), plt.ylabel(<span class="st">'ITPC'</span>)</span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'ITPC at electrode </span><span class="sc">{</span>channel2plot<span class="sc">}</span><span class="ss"> at </span><span class="sc">{</span>freq4phase<span class="sc">}</span><span class="ss"> Hz'</span>)</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter30_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.8a</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the phase frequencies to explore</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>phase_freqs <span class="op">=</span> np.arange(<span class="dv">2</span>, <span class="dv">21</span>)  <span class="co"># Hz</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>cfc_centertime <span class="op">=</span> <span class="dv">300</span>  <span class="co"># ms post-stimulus</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>pacz <span class="op">=</span> np.zeros(<span class="bu">len</span>(phase_freqs))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>cfc_centertime_idx <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(EEG[<span class="st">'times'</span>][<span class="dv">0</span>] <span class="op">-</span> cfc_centertime))</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over phase frequencies</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi, pfreq <span class="kw">in</span> <span class="bu">enumerate</span>(phase_freqs):</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convolution for lower frequency phase</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    wavelet <span class="op">=</span> np.exp(<span class="dv">2</span> <span class="op">*</span> <span class="ot">1j</span> <span class="op">*</span> np.pi <span class="op">*</span> pfreq <span class="op">*</span> time) <span class="op">*</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> (<span class="dv">4</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> pfreq))<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    fft_wavelet <span class="op">=</span> fft(wavelet, n_convolution)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    convolution_result <span class="op">=</span> ifft(fft_wavelet <span class="op">*</span> fft_EEG, n_convolution)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    convolution_result <span class="op">=</span> convolution_result[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size]</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    lower_freq_phase <span class="op">=</span> np.reshape(convolution_result, (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract temporally localized power and phase</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    power_ts <span class="op">=</span> np.<span class="bu">abs</span>(upper_freq_power[cfc_centertime_idx <span class="op">-</span> np.floor(cfc_time_window_idx<span class="op">/</span><span class="dv">2</span><span class="op">+</span><span class="fl">0.5</span>).astype(<span class="bu">int</span>):cfc_centertime_idx <span class="op">+</span> np.floor(cfc_time_window_idx<span class="op">/</span><span class="dv">2</span><span class="op">+</span><span class="fl">0.5</span>).astype(<span class="bu">int</span>) <span class="op">+</span> <span class="dv">1</span>, :])<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    phase_ts <span class="op">=</span> np.angle(lower_freq_phase[cfc_centertime_idx <span class="op">-</span> np.floor(cfc_time_window_idx<span class="op">/</span><span class="dv">2</span><span class="op">+</span><span class="fl">0.5</span>).astype(<span class="bu">int</span>):cfc_centertime_idx <span class="op">+</span> np.floor(cfc_time_window_idx<span class="op">/</span><span class="dv">2</span><span class="op">+</span><span class="fl">0.5</span>).astype(<span class="bu">int</span>) <span class="op">+</span> <span class="dv">1</span>, :])</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute observed PAC</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    obsPAC <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(power_ts.flatten(<span class="st">'F'</span>) <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase_ts.flatten(<span class="st">'F'</span>))))</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Permutation test</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    num_iter <span class="op">=</span> <span class="dv">2000</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    permutedPAC <span class="op">=</span> np.zeros(num_iter)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_iter):</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>        random_timepoint <span class="op">=</span> np.random.choice(np.<span class="bu">round</span>(cfc_time_window_idx <span class="op">*</span> <span class="fl">0.8</span>).astype(<span class="bu">int</span>), EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]) <span class="op">+</span> np.<span class="bu">round</span>(cfc_time_window_idx <span class="op">*</span> <span class="fl">0.1</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> triali <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>            power_ts[:, triali] <span class="op">=</span> np.roll(power_ts[:, triali], random_timepoint[triali])</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>        permutedPAC[i] <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(power_ts.flatten(<span class="st">'F'</span>) <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase_ts.flatten(<span class="st">'F'</span>))))</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>    pacz[fi] <span class="op">=</span> (obsPAC <span class="op">-</span> np.mean(permutedPAC)) <span class="op">/</span> np.std(permutedPAC)</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>plt.plot(phase_freqs, pacz, <span class="st">'-o'</span>)</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>plt.xlim([phase_freqs[<span class="dv">0</span>] <span class="op">-</span> <span class="fl">0.5</span>, phase_freqs[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> <span class="fl">0.5</span>])</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Lower frequency for phase (Hz)'</span>), plt.ylabel(<span class="st">'PAC_z'</span>)</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>max_phase_freq <span class="op">=</span> phase_freqs[np.argmax(pacz)]</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'Best lower frequency phase coupled with </span><span class="sc">{</span>freq4power<span class="sc">}</span><span class="ss"> Hz is </span><span class="sc">{</span>max_phase_freq<span class="sc">}</span><span class="ss"> Hz'</span>)</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter30_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.8b</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the power frequencies to explore</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>power_freqs <span class="op">=</span> np.arange(<span class="dv">20</span>, EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>]<span class="op">/</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">1</span>, <span class="dv">5</span>)  <span class="co"># Hz</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>pacz <span class="op">=</span> np.zeros(<span class="bu">len</span>(power_freqs))</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># convolution for lower frequency phase</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>wavelet <span class="op">=</span> np.exp(<span class="dv">2</span> <span class="op">*</span> <span class="ot">1j</span> <span class="op">*</span> np.pi <span class="op">*</span> freq4phase <span class="op">*</span> time) <span class="op">*</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> (<span class="dv">4</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> freq4phase))<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>fft_wavelet <span class="op">=</span> fft(wavelet, n_convolution)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>convolution_result <span class="op">=</span> ifft(fft_wavelet <span class="op">*</span> fft_EEG, n_convolution)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>convolution_result <span class="op">=</span> convolution_result[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size]</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>lower_freq_phase <span class="op">=</span> np.reshape(convolution_result, (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over power frequencies</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi, pwr_freq <span class="kw">in</span> <span class="bu">enumerate</span>(power_freqs):</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convolution for upper frequency power</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    wavelet <span class="op">=</span> np.exp(<span class="dv">2</span> <span class="op">*</span> <span class="ot">1j</span> <span class="op">*</span> np.pi <span class="op">*</span> pwr_freq <span class="op">*</span> time) <span class="op">*</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> (<span class="dv">4</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> pwr_freq))<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    fft_wavelet <span class="op">=</span> fft(wavelet, n_convolution)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    convolution_result <span class="op">=</span> ifft(fft_wavelet <span class="op">*</span> fft_EEG, n_convolution)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    convolution_result <span class="op">=</span> convolution_result[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size]</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    upper_freq_power <span class="op">=</span> np.reshape(convolution_result, (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract temporally localized power and phase</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    power_ts <span class="op">=</span> np.<span class="bu">abs</span>(upper_freq_power[cfc_centertime_idx <span class="op">-</span> np.floor(cfc_time_window_idx<span class="op">/</span><span class="dv">2</span><span class="op">+</span><span class="fl">0.5</span>).astype(<span class="bu">int</span>):cfc_centertime_idx <span class="op">+</span> np.floor(cfc_time_window_idx<span class="op">/</span><span class="dv">2</span><span class="op">+</span><span class="fl">0.5</span>).astype(<span class="bu">int</span>) <span class="op">+</span> <span class="dv">1</span>, :])<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    phase_ts <span class="op">=</span> np.angle(lower_freq_phase[cfc_centertime_idx <span class="op">-</span> np.floor(cfc_time_window_idx<span class="op">/</span><span class="dv">2</span><span class="op">+</span><span class="fl">0.5</span>).astype(<span class="bu">int</span>):cfc_centertime_idx <span class="op">+</span> np.floor(cfc_time_window_idx<span class="op">/</span><span class="dv">2</span><span class="op">+</span><span class="fl">0.5</span>).astype(<span class="bu">int</span>) <span class="op">+</span> <span class="dv">1</span>, :])</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute observed PAC</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    obsPAC <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(power_ts.flatten(<span class="st">'F'</span>) <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase_ts.flatten(<span class="st">'F'</span>))))</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Permutation test</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>    num_iter <span class="op">=</span> <span class="dv">2000</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    permutedPAC <span class="op">=</span> np.zeros(num_iter)</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_iter):</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>        random_timepoint <span class="op">=</span> np.random.choice(np.<span class="bu">round</span>(cfc_time_window_idx <span class="op">*</span> <span class="fl">0.8</span>).astype(<span class="bu">int</span>), EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]) <span class="op">+</span> np.<span class="bu">round</span>(cfc_time_window_idx <span class="op">*</span> <span class="fl">0.1</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> triali <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>            power_ts[:, triali] <span class="op">=</span> np.roll(power_ts[:, triali], random_timepoint[triali])</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>        permutedPAC[i] <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(power_ts.flatten(<span class="st">'F'</span>) <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> phase_ts.flatten(<span class="st">'F'</span>))))</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>    pacz[fi] <span class="op">=</span> (obsPAC <span class="op">-</span> np.mean(permutedPAC)) <span class="op">/</span> np.std(permutedPAC)</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>plt.plot(power_freqs, pacz, <span class="st">'-o'</span>)</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>plt.xlim([power_freqs[<span class="dv">0</span>] <span class="op">-</span> <span class="dv">3</span>, power_freqs[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> <span class="dv">3</span>])</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Upper frequency for power (Hz)'</span>), plt.ylabel(<span class="st">'PAC_z'</span>)</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>max_power_freq <span class="op">=</span> power_freqs[np.argmax(pacz)]</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'Best upper frequency power coupled with </span><span class="sc">{</span>freq4phase<span class="sc">}</span><span class="ss"> Hz is </span><span class="sc">{</span>max_power_freq<span class="sc">}</span><span class="ss"> Hz'</span>)</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter30_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.9</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># You have to figure this one out on your own!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.10</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># This figure is created by combining the code for figure 30.8. You need</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># two loops, one for lower-frequency phase and one for upper-frequency</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># power. Compute PAC at each phase-power pair, and then make an image of</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># the resulting (z-scored) PAC values.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.11</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the frequencies for phase and power</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>freqs4phase <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">21</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>freqs4power <span class="op">=</span> np.arange(<span class="dv">25</span>, <span class="bu">int</span>(EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">/</span> <span class="dv">2</span>) <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the matrix to store the number of power cycles per phase cycle</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>powcycles_per_phscycles <span class="op">=</span> np.zeros((<span class="bu">len</span>(freqs4power), <span class="bu">len</span>(freqs4phase)))</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over phase and power frequencies</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> phsi, pfreq <span class="kw">in</span> <span class="bu">enumerate</span>(freqs4phase):</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> powi, pwr_freq <span class="kw">in</span> <span class="bu">enumerate</span>(freqs4power):</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Number of power cycles per phase cycle, scaled by sampling rate</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        powcycles_per_phscycles[powi, phsi] <span class="op">=</span> (pwr_freq <span class="op">/</span> pfreq) <span class="op">/</span> (<span class="dv">1000</span> <span class="op">/</span> EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>plt.imshow(np.log10(powcycles_per_phscycles), extent<span class="op">=</span>[freqs4phase[<span class="dv">0</span>], freqs4phase[<span class="op">-</span><span class="dv">1</span>], freqs4power[<span class="dv">0</span>], freqs4power[<span class="op">-</span><span class="dv">1</span>]], aspect<span class="op">=</span><span class="st">'auto'</span>, origin<span class="op">=</span><span class="st">'lower'</span>, cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>plt.colorbar()</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter30_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 30.12</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define wavelet parameters</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>upperfreq <span class="op">=</span> <span class="dv">70</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>lowerfreq <span class="op">=</span> <span class="dv">12</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Other wavelet parameters</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>srate, <span class="dv">1</span><span class="op">/</span>srate)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>half_of_wavelet_size <span class="op">=</span> (<span class="bu">len</span>(time)<span class="op">-</span><span class="dv">1</span>)<span class="op">//</span><span class="dv">2</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>n_wavelet <span class="op">=</span> <span class="bu">len</span>(time)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>n_data <span class="op">=</span> <span class="bu">len</span>(eeg)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>n_convolution <span class="op">=</span> n_wavelet <span class="op">+</span> n_data <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co"># FFT of data</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>fft_EEG <span class="op">=</span> fft(eeg, n_convolution)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Convolution for lower frequency phase (with 4 cycles)</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>waveletL <span class="op">=</span> np.exp(<span class="dv">2</span><span class="op">*</span><span class="ot">1j</span><span class="op">*</span>np.pi<span class="op">*</span>lowerfreq<span class="op">*</span>time) <span class="op">*</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>(<span class="dv">4</span><span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>lowerfreq))<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>fft_waveletL <span class="op">=</span> fft(waveletL, n_convolution)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>convolution_resultL <span class="op">=</span> ifft(fft_waveletL <span class="op">*</span> fft_EEG, n_convolution)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>lowerfreq_phase <span class="op">=</span> np.angle(convolution_resultL[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size])</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Convolution for upper frequency (with 4 cycles)</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>waveletH <span class="op">=</span> np.exp(<span class="dv">2</span><span class="op">*</span><span class="ot">1j</span><span class="op">*</span>np.pi<span class="op">*</span>upperfreq<span class="op">*</span>time) <span class="op">*</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>(<span class="dv">4</span><span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>upperfreq))<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>fft_waveletH <span class="op">=</span> fft(waveletH, n_convolution)</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>convolution_resultH <span class="op">=</span> ifft(fft_waveletH <span class="op">*</span> fft_EEG, n_convolution)</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>upperfreq_amp <span class="op">=</span> np.<span class="bu">abs</span>(convolution_resultH[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size])</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the upper frequency power in the lower frequency range</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>convolution_result_filtered <span class="op">=</span> ifft(fft_waveletL <span class="op">*</span> fft(upperfreq_amp, n_convolution), n_convolution)</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>upperfreq_amp_phase <span class="op">=</span> np.angle(convolution_result_filtered[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size])</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">10</span>))</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">411</span>)</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>plt.plot(eegtime, lowerfreq_phase)</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">2</span>])</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'</span><span class="sc">{</span>lowerfreq<span class="sc">}</span><span class="ss"> Hz phase'</span>)</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">412</span>)</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>plt.plot(eegtime, upperfreq_amp)</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">2</span>])</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'</span><span class="sc">{</span>upperfreq<span class="sc">}</span><span class="ss"> Hz power'</span>)</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">413</span>)</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>plt.plot(eegtime, np.real(convolution_result_filtered[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size]))</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">2</span>])</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'</span><span class="sc">{</span>upperfreq<span class="sc">}</span><span class="ss"> Hz power filtered at </span><span class="sc">{</span>lowerfreq<span class="sc">}</span><span class="ss"> Hz'</span>)</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">414</span>)</span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>plt.plot(eegtime, upperfreq_amp_phase)</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>plt.plot(eegtime, lowerfreq_phase, <span class="st">'r'</span>)</span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>plt.legend([<span class="st">'Upper'</span>, <span class="st">'Lower'</span>])</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">2</span>])</span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'Phase of </span><span class="sc">{</span>lowerfreq<span class="sc">}</span><span class="ss"> Hz component in </span><span class="sc">{</span>upperfreq<span class="sc">}</span><span class="ss"> Hz power'</span>)</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute synchronization</span></span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>phasephase_synch <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(np.exp(<span class="ot">1j</span> <span class="op">*</span> (lowerfreq_phase <span class="op">-</span> upperfreq_amp_phase))))</span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Phase-phase coupling between </span><span class="sc">{</span>lowerfreq<span class="sc">}</span><span class="ss"> Hz and </span><span class="sc">{</span>upperfreq<span class="sc">}</span><span class="ss"> Hz is </span><span class="sc">{</span>phasephase_synch<span class="sc">:.5f}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter30_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Phase-phase coupling between 12 Hz and 70 Hz is 0.27535</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

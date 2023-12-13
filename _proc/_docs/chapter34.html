@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>AnalyzingNeuralTimeSeries-Python - Chapter 34</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="AnalyzingNeuralTimeSeries-Python - Chapter 34">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://agencyenterprise.github.io/AnalyzingNeuralTimeSeries-Python/chapter34_files/figure-html/cell-4-output-1.png">
+<meta property="og:site-name" content="AnalyzingNeuralTimeSeries-Python">
+<meta property="og:image:height" content="790">
+<meta property="og:image:width" content="990">
+<meta name="twitter:title" content="AnalyzingNeuralTimeSeries-Python - Chapter 34">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://agencyenterprise.github.io/AnalyzingNeuralTimeSeries-Python/chapter34_files/figure-html/cell-4-output-1.png">
+<meta name="twitter:image-height" content="790">
+<meta name="twitter:image-width" content="990">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">AnalyzingNeuralTimeSeries-Python</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter34.html">Chapter 34</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AnalyzingNeuralTimeSeries-Python</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 2</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4a</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4b</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4c</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter22.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter23.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter25.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter26.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter27.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter28.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter29.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter30.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter31.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter33.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter34.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Chapter 34</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#analyzing-neural-time-series-data" id="toc-analyzing-neural-time-series-data" class="nav-link active" data-scroll-target="#analyzing-neural-time-series-data">Analyzing Neural Time Series Data</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/agencyenterprise/AnalyzingNeuralTimeSeries-Python/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Chapter 34</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="analyzing-neural-time-series-data" class="level3">
+<h3 class="anchored" data-anchor-id="analyzing-neural-time-series-data">Analyzing Neural Time Series Data</h3>
+<p>Python code for Chapter 34 – converted from original Matlab by AE Studio (and ChatGPT)<br>
+Original Matlab code by Mike X Cohen</p>
+<p>This code accompanies the book, titled “Analyzing Neural Time Series Data” (MIT Press).<br>
+Using the code without following the book may lead to confusion, incorrect data analyses, and misinterpretations of results.<br>
+Mike X Cohen and AE Studio assume no responsibility for inappropriate or incorrect use of this code.</p>
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import necessary libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.io <span class="im">import</span> loadmat</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.fftpack <span class="im">import</span> fft, ifft</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm, t, rankdata, zscore</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.ndimage <span class="im">import</span> label</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract TF power (create data that are used for the rest of this chapter)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load sample data</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>EEG <span class="op">=</span> loadmat(<span class="st">'../data/sampleEEGdata.mat'</span>)[<span class="st">'EEG'</span>][<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Definitions, selections...</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>chan2use <span class="op">=</span> <span class="st">'FCz'</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>min_freq <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>max_freq <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>num_frex <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Define wavelet parameters</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>EEG[<span class="st">'srate'</span>][<span class="dv">0</span>, <span class="dv">0</span>], <span class="dv">1</span><span class="op">/</span>EEG[<span class="st">'srate'</span>][<span class="dv">0</span>, <span class="dv">0</span>])</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>frex <span class="op">=</span> np.logspace(np.log10(min_freq), np.log10(max_freq), num_frex)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> np.logspace(np.log10(<span class="dv">3</span>), np.log10(<span class="dv">10</span>), num_frex) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> frex)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Define convolution parameters</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>n_wavelet <span class="op">=</span> <span class="bu">len</span>(time)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>n_data <span class="op">=</span> EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>, <span class="dv">0</span>] <span class="op">*</span> EEG[<span class="st">'trials'</span>][<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>n_convolution <span class="op">=</span> n_wavelet <span class="op">+</span> n_data <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>n_conv_pow2 <span class="op">=</span> <span class="bu">int</span>(<span class="dv">2</span> <span class="op">**</span> np.ceil(np.log2(n_convolution)))</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>half_of_wavelet_size <span class="op">=</span> (n_wavelet <span class="op">-</span> <span class="dv">1</span>) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that you don't need the wavelet itself, you need the FFT of the wavelet</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>wavelets <span class="op">=</span> np.zeros((num_frex, n_conv_pow2), dtype<span class="op">=</span><span class="bu">complex</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(num_frex):</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    wavelets[fi, :] <span class="op">=</span> fft(np.sqrt(<span class="dv">1</span> <span class="op">/</span> (s[fi] <span class="op">*</span> np.sqrt(np.pi))) <span class="op">*</span> np.exp(<span class="dv">2</span> <span class="op">*</span> <span class="ot">1j</span> <span class="op">*</span> np.pi <span class="op">*</span> frex[fi] <span class="op">*</span> time) <span class="op">*</span> np.exp(<span class="op">-</span>time <span class="op">**</span> <span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> (s[fi] <span class="op">**</span> <span class="dv">2</span>))), n_conv_pow2)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Get FFT of data</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>eegfft <span class="op">=</span> fft(EEG[<span class="st">'data'</span>][EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="st">'labels'</span>]<span class="op">==</span>chan2use, :, :].flatten(<span class="st">'F'</span>), n_conv_pow2)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>eegpower <span class="op">=</span> np.zeros((num_frex, EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>, <span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>, <span class="dv">0</span>]))  <span class="co"># frequencies X time X trials</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>eegphase <span class="op">=</span> np.zeros((num_frex, EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>, <span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>, <span class="dv">0</span>]), dtype<span class="op">=</span><span class="bu">complex</span>)  <span class="co"># frequencies X time X trials</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through frequencies and compute synchronization</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(num_frex):</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convolution</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    eegconv <span class="op">=</span> ifft(wavelets[fi, :] <span class="op">*</span> eegfft)</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    eegconv <span class="op">=</span> eegconv[:n_convolution]</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    eegconv <span class="op">=</span> eegconv[half_of_wavelet_size: <span class="op">-</span>half_of_wavelet_size]</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reshape to time X trials</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    eegpower[fi, :, :] <span class="op">=</span> np.<span class="bu">abs</span>(np.reshape(eegconv, (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>, <span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>, <span class="dv">0</span>]), <span class="st">'F'</span>)) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    eegphase[fi, :, :] <span class="op">=</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> np.angle(np.reshape(eegconv, (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>, <span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>, <span class="dv">0</span>]), <span class="st">'F'</span>)))</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove edge artifacts</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>time_s <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(EEG[<span class="st">'times'</span>][<span class="dv">0</span>] <span class="op">-</span> (<span class="op">-</span><span class="dv">500</span>)))</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>time_e <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(EEG[<span class="st">'times'</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1200</span>))</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>eegpower <span class="op">=</span> eegpower[:, time_s:time_e<span class="op">+</span><span class="dv">1</span>, :]</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>tftimes <span class="op">=</span> EEG[<span class="st">'times'</span>][<span class="dv">0</span>][time_s:time_e<span class="op">+</span><span class="dv">1</span>]</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>nTimepoints <span class="op">=</span> <span class="bu">len</span>(tftimes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 34.1</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>voxel_pval <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>cluster_pval <span class="op">=</span> <span class="fl">0.05</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: try to use 1000 or more permutations for real data</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>n_permutes <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>baseidx <span class="op">=</span> [np.argmin(np.<span class="bu">abs</span>(tftimes <span class="op">-</span> t)) <span class="cf">for</span> t <span class="kw">in</span> [<span class="op">-</span><span class="dv">500</span>, <span class="op">-</span><span class="dv">100</span>]]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute actual t-test of difference</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>realbaselines <span class="op">=</span> np.mean(eegpower[:, baseidx[<span class="dv">0</span>]:baseidx[<span class="dv">1</span>]<span class="op">+</span><span class="dv">1</span>, :], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>realmean <span class="op">=</span> <span class="dv">10</span> <span class="op">*</span> np.log10(np.mean(eegpower, axis<span class="op">=</span><span class="dv">2</span>) <span class="op">/</span> np.mean(realbaselines, axis<span class="op">=</span><span class="dv">1</span>)[:, <span class="va">None</span>])  <span class="co"># Normalize power</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize null hypothesis matrices</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>permuted_maxvals <span class="op">=</span> np.zeros((n_permutes, <span class="dv">2</span>, num_frex))</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>permuted_vals <span class="op">=</span> np.zeros((n_permutes, num_frex, <span class="bu">len</span>(tftimes)))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>max_clust_info <span class="op">=</span> np.zeros(n_permutes)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Correcting the cutpoint calculation</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> permi <span class="kw">in</span> <span class="bu">range</span>(n_permutes):</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    cutpoint <span class="op">=</span> np.random.choice(<span class="bu">range</span>(<span class="dv">2</span>, nTimepoints <span class="op">-</span> np.diff(baseidx)[<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>))</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    permuted_vals[permi, :, :] <span class="op">=</span> <span class="dv">10</span> <span class="op">*</span> np.log10(np.mean(np.roll(eegpower, cutpoint, axis<span class="op">=</span><span class="dv">1</span>), axis<span class="op">=</span><span class="dv">2</span>) <span class="op">/</span> np.mean(realbaselines, axis<span class="op">=</span><span class="dv">1</span>)[:, <span class="va">None</span>])</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>zmap <span class="op">=</span> (realmean <span class="op">-</span> np.mean(permuted_vals, axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> np.std(permuted_vals, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>threshmean <span class="op">=</span> realmean.copy()</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>threshmean[np.<span class="bu">abs</span>(zmap) <span class="op">&lt;</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the figures</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Power map</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(tftimes, frex, realmean, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>, vmin<span class="op">=-</span><span class="dv">3</span>, vmax<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Power map'</span>)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Unthresholded Z map</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">1</span>]</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(tftimes, frex, zmap, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>, vmin<span class="op">=-</span><span class="dv">3</span>, vmax<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Unthresholded Z map'</span>)</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncorrected power map</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">0</span>]</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(tftimes, frex, threshmean, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>, vmin<span class="op">=-</span><span class="dv">3</span>, vmax<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Uncorrected power map'</span>)</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> permi <span class="kw">in</span> <span class="bu">range</span>(n_permutes):</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Cluster correction</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    fakecorrsz <span class="op">=</span> (permuted_vals[permi, :, :] <span class="op">-</span> np.mean(permuted_vals, axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> np.std(permuted_vals, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>    fakecorrsz[np.<span class="bu">abs</span>(fakecorrsz) <span class="op">&lt;</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get number of elements in largest supra-threshold cluster</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    labeled_array, num_features <span class="op">=</span> label(fakecorrsz)</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    max_clust_info[permi] <span class="op">=</span> np.<span class="bu">max</span>([<span class="dv">0</span>] <span class="op">+</span> [np.<span class="bu">sum</span>(labeled_array <span class="op">==</span> i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, num_features <span class="op">+</span> <span class="dv">1</span>)])</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply cluster-level corrected threshold</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>zmapthresh <span class="op">=</span> zmap.copy()</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncorrected pixel-level threshold</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>zmapthresh[np.<span class="bu">abs</span>(zmapthresh) <span class="op">&lt;</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Find islands and remove those smaller than cluster size threshold</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>labeled_array, num_features <span class="op">=</span> label(zmapthresh)</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>cluster_sizes <span class="op">=</span> np.array([np.<span class="bu">sum</span>(labeled_array <span class="op">==</span> i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, num_features <span class="op">+</span> <span class="dv">1</span>)])</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>clust_threshold <span class="op">=</span> np.percentile(max_clust_info, <span class="dv">100</span> <span class="op">-</span> cluster_pval <span class="op">*</span> <span class="dv">100</span>)</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify clusters to remove</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>whichclusters2remove <span class="op">=</span> np.where(cluster_sizes <span class="op">&lt;</span> clust_threshold)[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span>  <span class="co"># +1 for 1-based indexing</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove clusters</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> clust <span class="kw">in</span> whichclusters2remove:</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    zmapthresh[labeled_array <span class="op">==</span> clust] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the cluster-corrected Z map</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(tftimes, frex, zmapthresh, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>, vmin<span class="op">=-</span><span class="dv">3</span>, vmax<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Cluster-corrected Z map'</span>)</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter34_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 34.3</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>voxel_pval <span class="op">=</span> <span class="fl">0.05</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>mcc_voxel_pval <span class="op">=</span> <span class="fl">0.05</span>  <span class="co"># mcc = multiple comparisons correction</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>mcc_cluster_pval <span class="op">=</span> <span class="fl">0.05</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: try to use 1000 or more permutations for real data</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>n_permutes <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>real_condition_mapping <span class="op">=</span> np.concatenate((<span class="op">-</span>np.ones(<span class="bu">int</span>(np.floor(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>, <span class="dv">0</span>] <span class="op">/</span> <span class="dv">2</span>))), np.ones(<span class="bu">int</span>(np.ceil(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>, <span class="dv">0</span>] <span class="op">/</span> <span class="dv">2</span>)))))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute actual t-test of difference (using unequal N and std)</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>tnum <span class="op">=</span> np.mean(eegpower[:, :, real_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>) <span class="op">-</span> np.mean(eegpower[:, :, real_condition_mapping <span class="op">==</span> <span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>tdenom <span class="op">=</span> np.sqrt((np.std(eegpower[:, :, real_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>, ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(real_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                 (np.std(eegpower[:, :, real_condition_mapping <span class="op">==</span> <span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>, ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(real_condition_mapping <span class="op">==</span> <span class="dv">1</span>))</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>real_t <span class="op">=</span> tnum <span class="op">/</span> tdenom</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize null hypothesis matrices</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>permuted_tvals <span class="op">=</span> np.zeros((n_permutes, num_frex, nTimepoints))</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>max_pixel_pvals <span class="op">=</span> np.zeros((n_permutes, <span class="dv">2</span>))</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>max_clust_info <span class="op">=</span> np.zeros(n_permutes)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate pixel-specific null hypothesis parameter distributions</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> permi <span class="kw">in</span> <span class="bu">range</span>(n_permutes):</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    fake_condition_mapping <span class="op">=</span> np.sign(np.random.randn(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>, <span class="dv">0</span>]))</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute t-map of null hypothesis</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    tnum <span class="op">=</span> np.mean(eegpower[:, :, fake_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>) <span class="op">-</span> np.mean(eegpower[:, :, fake_condition_mapping <span class="op">==</span> <span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    tdenom <span class="op">=</span> np.sqrt((np.std(eegpower[:, :, fake_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>, ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(fake_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>                     (np.std(eegpower[:, :, fake_condition_mapping <span class="op">==</span> <span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>, ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(fake_condition_mapping <span class="op">==</span> <span class="dv">1</span>))</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    tmap <span class="op">=</span> tnum <span class="op">/</span> tdenom</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save all permuted values</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    permuted_tvals[permi, :, :] <span class="op">=</span> tmap</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save maximum pixel values</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    max_pixel_pvals[permi, :] <span class="op">=</span> [np.<span class="bu">min</span>(tmap), np.<span class="bu">max</span>(tmap)]</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># For cluster correction, apply uncorrected threshold and get maximum cluster sizes</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    tmap[np.<span class="bu">abs</span>(tmap) <span class="op">&lt;</span> t.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval, EEG[<span class="st">'trials'</span>][<span class="dv">0</span>, <span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get number of elements in largest supra-threshold cluster</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    labeled_array, num_features <span class="op">=</span> label(tmap)</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    max_clust_info[permi] <span class="op">=</span> np.<span class="bu">max</span>([<span class="dv">0</span>] <span class="op">+</span> [np.<span class="bu">sum</span>(labeled_array <span class="op">==</span> i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, num_features <span class="op">+</span> <span class="dv">1</span>)])</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Now compute Z-map</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>zmap <span class="op">=</span> (real_t <span class="op">-</span> np.mean(permuted_tvals, axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> np.std(permuted_tvals, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Unthresholded Z map</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(tftimes, frex, zmap, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Unthresholded Z map'</span>)</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>zmapthresh_uncorr <span class="op">=</span> zmap.copy()</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>t_thresh_uncorr <span class="op">=</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>zmapthresh_uncorr[np.<span class="bu">abs</span>(zmapthresh_uncorr) <span class="op">&lt;</span> t_thresh_uncorr] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncorrected thresholded Z map</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">1</span>]</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(tftimes, frex, zmap, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>ax.contour(tftimes, frex, zmapthresh_uncorr, levels<span class="op">=</span>[<span class="op">-</span>t_thresh_uncorr, t_thresh_uncorr], colors<span class="op">=</span><span class="st">'k'</span>, linewidths<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Unthresholded Z map'</span>)</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply pixel-level corrected threshold</span></span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>lower_threshold <span class="op">=</span> np.percentile(max_pixel_pvals[:, <span class="dv">0</span>], mcc_voxel_pval <span class="op">*</span> <span class="dv">100</span> <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>upper_threshold <span class="op">=</span> np.percentile(max_pixel_pvals[:, <span class="dv">1</span>], <span class="dv">100</span> <span class="op">-</span> mcc_voxel_pval <span class="op">*</span> <span class="dv">100</span> <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>zmapthresh <span class="op">=</span> zmap.copy()</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>zmapthresh[(zmap <span class="op">&gt;</span> lower_threshold) <span class="op">&amp;</span> (zmap <span class="op">&lt;</span> upper_threshold)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a><span class="co"># Pixel-corrected Z map</span></span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">0</span>]</span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(tftimes, frex, zmapthresh, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Pixel-corrected Z map'</span>)</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply cluster-level corrected threshold</span></span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>zmapthresh <span class="op">=</span> zmap.copy()</span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>zmapthresh[np.<span class="bu">abs</span>(zmapthresh) <span class="op">&lt;</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a><span class="co"># Find islands and remove those smaller than cluster size threshold</span></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>labeled_array, num_features <span class="op">=</span> label(zmapthresh)</span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>cluster_sizes <span class="op">=</span> np.array([np.<span class="bu">sum</span>(labeled_array <span class="op">==</span> i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, num_features <span class="op">+</span> <span class="dv">1</span>)])</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>clust_threshold <span class="op">=</span> np.percentile(max_clust_info, <span class="dv">100</span> <span class="op">-</span> mcc_cluster_pval <span class="op">*</span> <span class="dv">100</span>)</span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify clusters to remove</span></span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>whichclusters2remove <span class="op">=</span> np.where(cluster_sizes <span class="op">&lt;</span> clust_threshold)[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span>  <span class="co"># +1 for 1-based indexing</span></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove clusters</span></span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> clust <span class="kw">in</span> whichclusters2remove:</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>    zmapthresh[labeled_array <span class="op">==</span> clust] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a><span class="co"># Cluster-corrected Z map</span></span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(tftimes, frex, zmapthresh, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Cluster-corrected Z map'</span>)</span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter34_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 34.4</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>voxel_pval <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>mcc_voxel_pval <span class="op">=</span> <span class="fl">0.05</span>  <span class="co"># mcc = multiple comparisons correction</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>mcc_cluster_pval <span class="op">=</span> <span class="fl">0.05</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: try to use 1000 or more permutations for real data</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>n_permutes <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Define covariates (RT and trial number)</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>rts <span class="op">=</span> np.zeros(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ei <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># In this task, the button press always followed the stimulus at</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># time=0. Thus, finding the RT involves finding the latency of the</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># event that occurs after the time=0 event.</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If you follow a procedure like this in your data, you may need to</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># include special exceptions, e.g., if there was no response or if</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># a non-response marker could have occurred between stimulus and response.</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    time0event <span class="op">=</span> np.where(np.array(EEG[<span class="st">'epoch'</span>][<span class="dv">0</span>][ei][<span class="st">'eventlatency'</span>][<span class="dv">0</span>]) <span class="op">==</span> <span class="dv">0</span>)[<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    rts[ei] <span class="op">=</span> EEG[<span class="st">'epoch'</span>][<span class="dv">0</span>][ei][<span class="st">'eventlatency'</span>][<span class="dv">0</span>][time0event <span class="op">+</span> <span class="dv">1</span>]</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank-transform RTs</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>rtsrank <span class="op">=</span> rankdata(rts)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank-transform power data (must be transformed)</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>eegpowerreshaped <span class="op">=</span> np.reshape(eegpower, (num_frex <span class="op">*</span> nTimepoints, EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>).T</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>eegpowerrank <span class="op">=</span> rankdata(eegpowerreshaped, axis<span class="op">=</span><span class="dv">0</span>).T</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the matrix regression</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>realcorrs <span class="op">=</span> np.linalg.lstsq((rtsrank.T <span class="op">@</span> rtsrank)[np.newaxis, np.newaxis], (rtsrank.T <span class="op">@</span> eegpowerrank.T)[np.newaxis, :], rcond<span class="op">=</span><span class="va">None</span>)[<span class="dv">0</span>]</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape the result to match the dimensions of frequency by time points</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>realcorrs <span class="op">=</span> np.reshape(realcorrs, (num_frex, nTimepoints), <span class="st">'F'</span>)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize null hypothesis matrices</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>permuted_corrs <span class="op">=</span> np.zeros((n_permutes, num_frex, nTimepoints))</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>max_pixel_pvals <span class="op">=</span> np.zeros((n_permutes, <span class="dv">2</span>))</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>max_clust_info <span class="op">=</span> np.zeros(n_permutes)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate pixel-specific null hypothesis parameter distributions</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> permi <span class="kw">in</span> <span class="bu">range</span>(n_permutes):</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    fake_rt_mapping <span class="op">=</span> rtsrank[np.random.permutation(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>])]</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute t-map of null hypothesis</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    fakecorrs <span class="op">=</span> np.linalg.lstsq((fake_rt_mapping.T <span class="op">@</span> fake_rt_mapping)[np.newaxis, np.newaxis], (fake_rt_mapping.T <span class="op">@</span> eegpowerrank.T)[np.newaxis, :], rcond<span class="op">=</span><span class="va">None</span>)[<span class="dv">0</span>]</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reshape the result to match the dimensions of frequency by time pointsq</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    fakecorrs <span class="op">=</span> np.reshape(fakecorrs, (num_frex, nTimepoints), <span class="st">'F'</span>)</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save all permuted values</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    permuted_corrs[permi, :, :] <span class="op">=</span> fakecorrs</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save maximum pixel values</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    max_pixel_pvals[permi, :] <span class="op">=</span> [np.<span class="bu">min</span>(fakecorrs), np.<span class="bu">max</span>(fakecorrs)]</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="co"># this time, the cluster correction will be done on the permuted data, thus</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="co"># making no assumptions about parameters for p-values</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> permi <span class="kw">in</span> <span class="bu">range</span>(n_permutes):</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Indices of permutations to include in this iteration</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>    perms2use4distribution <span class="op">=</span> np.ones(n_permutes, dtype<span class="op">=</span><span class="bu">bool</span>)</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>    perms2use4distribution[permi] <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>    <span class="co"># For cluster correction, apply uncorrected threshold and get maximum cluster sizes</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>    fakecorrsz <span class="op">=</span> (permuted_corrs[permi, :, :] <span class="op">-</span> np.mean(permuted_corrs[perms2use4distribution, :, :], axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> np.std(permuted_corrs[perms2use4distribution, :, :], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>    fakecorrsz[np.<span class="bu">abs</span>(fakecorrsz) <span class="op">&lt;</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get number of elements in largest supra-threshold cluster</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>    labeled_array, num_features <span class="op">=</span> label(fakecorrsz)</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>    max_clust_info[permi] <span class="op">=</span> np.<span class="bu">max</span>([<span class="dv">0</span>] <span class="op">+</span> [np.<span class="bu">sum</span>(labeled_array <span class="op">==</span> i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, num_features <span class="op">+</span> <span class="dv">1</span>)])</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Now compute Z-map</span></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>zmap <span class="op">=</span> (realcorrs <span class="op">-</span> np.mean(permuted_corrs, axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> np.std(permuted_corrs, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Unthresholded Z map</span></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(tftimes, frex, zmap, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Unthresholded Z map'</span>)</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>zmapthresh_uncorr <span class="op">=</span> zmap.copy()</span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>z_thresh_uncorr <span class="op">=</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>zmapthresh_uncorr[np.<span class="bu">abs</span>(zmapthresh_uncorr) <span class="op">&lt;</span> z_thresh_uncorr] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncorrected thresholded Z map</span></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">1</span>]</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(tftimes, frex, zmap, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>ax.contour(tftimes, frex, zmapthresh_uncorr, levels<span class="op">=</span>[<span class="op">-</span>z_thresh_uncorr, z_thresh_uncorr], colors<span class="op">=</span><span class="st">'k'</span>, linewidths<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Uncorrected thresholded Z map'</span>)</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply pixel-level corrected threshold</span></span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>lower_threshold <span class="op">=</span> np.percentile(max_pixel_pvals[:, <span class="dv">0</span>], mcc_voxel_pval <span class="op">*</span> <span class="dv">100</span> <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>upper_threshold <span class="op">=</span> np.percentile(max_pixel_pvals[:, <span class="dv">1</span>], <span class="dv">100</span> <span class="op">-</span> mcc_voxel_pval <span class="op">*</span> <span class="dv">100</span> <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>zmapthresh <span class="op">=</span> zmap.copy()</span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>zmapthresh[(realcorrs <span class="op">&gt;</span> lower_threshold) <span class="op">&amp;</span> (realcorrs <span class="op">&lt;</span> upper_threshold)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="co"># Pixel-corrected Z map</span></span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">0</span>]</span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(tftimes, frex, zmapthresh, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Pixel-corrected Z map'</span>)</span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply cluster-level corrected threshold</span></span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>zmapthresh <span class="op">=</span> zmap.copy()</span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>zmapthresh[np.<span class="bu">abs</span>(zmapthresh) <span class="op">&lt;</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Find islands and remove those smaller than cluster size threshold</span></span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>labeled_array, num_features <span class="op">=</span> label(zmapthresh)</span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>cluster_sizes <span class="op">=</span> np.array([np.<span class="bu">sum</span>(labeled_array <span class="op">==</span> i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, num_features <span class="op">+</span> <span class="dv">1</span>)])</span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>clust_threshold <span class="op">=</span> np.percentile(max_clust_info, <span class="dv">100</span> <span class="op">-</span> mcc_cluster_pval <span class="op">*</span> <span class="dv">100</span>)</span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify clusters to remove</span></span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>whichclusters2remove <span class="op">=</span> np.where(cluster_sizes <span class="op">&lt;</span> clust_threshold)[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span>  <span class="co"># +1 for 1-based indexing</span></span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove clusters</span></span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> clust <span class="kw">in</span> whichclusters2remove:</span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>    zmapthresh[labeled_array <span class="op">==</span> clust] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a><span class="co"># Cluster-corrected Z map</span></span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(tftimes, frex, zmapthresh, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Cluster-corrected Z map'</span>)</span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter34_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 34.5</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>chan2use <span class="op">=</span> <span class="st">'O1'</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>time2use <span class="op">=</span> [np.argmin(np.<span class="bu">abs</span>(EEG[<span class="st">'times'</span>][<span class="dv">0</span>] <span class="op">-</span> t)) <span class="cf">for</span> t <span class="kw">in</span> [<span class="dv">0</span>, <span class="dv">250</span>]]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>freq2use <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(frex <span class="op">-</span> <span class="dv">10</span>))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>eegfft <span class="op">=</span> fft(EEG[<span class="st">'data'</span>][EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="st">'labels'</span>]<span class="op">==</span>chan2use, :, :].flatten(<span class="st">'F'</span>), n_conv_pow2)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>eegconv <span class="op">=</span> ifft(wavelets[freq2use, :] <span class="op">*</span> eegfft)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>eegconv <span class="op">=</span> eegconv[:n_convolution]</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>eegconv <span class="op">=</span> eegconv[half_of_wavelet_size: <span class="op">-</span>half_of_wavelet_size]</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape to time X trials</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> np.<span class="bu">abs</span>(np.reshape(eegconv, (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>, <span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>, <span class="dv">0</span>]), <span class="st">'F'</span>)) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>o1power <span class="op">=</span> zscore(np.mean(temp[time2use[<span class="dv">0</span>]:time2use[<span class="dv">1</span>]<span class="op">+</span><span class="dv">1</span>, :], axis<span class="op">=</span><span class="dv">0</span>))</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Define covariates (RT and trial number)</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.vstack((zscore(rtsrank), o1power))</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>eegpowerrank <span class="op">=</span> rankdata(eegpowerreshaped, axis<span class="op">=</span><span class="dv">0</span>).T</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the covariate matrix and rank-transformed power data</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Covariate matrix</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">0</span>]</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>cax <span class="op">=</span> ax.imshow(X, aspect<span class="op">=</span><span class="st">'auto'</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>)</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank-transformed power data</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">1</span>]</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>cax <span class="op">=</span> ax.imshow(eegpowerrank, aspect<span class="op">=</span><span class="st">'auto'</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, interpolation<span class="op">=</span><span class="st">'none'</span>)</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter34_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 34.6</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>voxel_pval <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>mcc_cluster_pval <span class="op">=</span> <span class="fl">0.05</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: try to use 1000 or more permutations for real data</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>n_permutes <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the regression using np.linalg.lstsq</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>realbeta <span class="op">=</span> np.linalg.lstsq(X <span class="op">@</span> X.T, X <span class="op">@</span> eegpowerrank.T, rcond<span class="op">=</span><span class="va">None</span>)[<span class="dv">0</span>]</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>realbeta <span class="op">=</span> np.reshape(realbeta, (<span class="dv">2</span>, num_frex, nTimepoints), order<span class="op">=</span><span class="st">'F'</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize null hypothesis matrices</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>permuted_bvals <span class="op">=</span> np.zeros((n_permutes, <span class="dv">2</span>, num_frex, nTimepoints))</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>max_clust_info <span class="op">=</span> np.zeros((n_permutes, <span class="dv">2</span>))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate pixel-specific null hypothesis parameter distributions</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> permi <span class="kw">in</span> <span class="bu">range</span>(n_permutes):</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Randomly shuffle trial order</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    fakeX <span class="op">=</span> X[:, np.random.permutation(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>])]</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute beta-map of null hypothesis</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    fakebeta <span class="op">=</span> np.linalg.lstsq(fakeX <span class="op">@</span> fakeX.T, fakeX <span class="op">@</span> eegpowerrank.T, rcond<span class="op">=</span><span class="va">None</span>)[<span class="dv">0</span>]</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    fakebeta <span class="op">=</span> np.reshape(fakebeta, (<span class="dv">2</span>, num_frex, nTimepoints), order<span class="op">=</span><span class="st">'F'</span>)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save all permuted values</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    permuted_bvals[permi, :, :, :] <span class="op">=</span> fakebeta</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Cluster correction will be done on the permuted data</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> permi <span class="kw">in</span> <span class="bu">range</span>(n_permutes):</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> testi <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Apply uncorrected threshold and get maximum cluster sizes</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        fakecorrsz <span class="op">=</span> (permuted_bvals[permi, testi, :, :] <span class="op">-</span> np.mean(permuted_bvals[:, testi, :, :], axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> np.std(permuted_bvals[:, testi, :, :], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        fakecorrsz[np.<span class="bu">abs</span>(fakecorrsz) <span class="op">&lt;</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get number of elements in largest supra-threshold cluster</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>        labeled_array, num_features <span class="op">=</span> label(fakecorrsz)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>        max_clust_info[permi, testi] <span class="op">=</span> np.<span class="bu">max</span>([<span class="dv">0</span>] <span class="op">+</span> [np.<span class="bu">sum</span>(labeled_array <span class="op">==</span> i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, num_features <span class="op">+</span> <span class="dv">1</span>)])</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the figures for Figure 34.6</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">10</span>))</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> testi <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Now compute Z-map</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    zmap <span class="op">=</span> (realbeta[testi, :, :] <span class="op">-</span> np.mean(permuted_bvals[:, testi, :, :], axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> np.std(permuted_bvals[:, testi, :, :], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Unthresholded Z map</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> axs[testi, <span class="dv">0</span>]</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>    cf <span class="op">=</span> ax.contourf(tftimes, frex, zmap, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'Unthresholded Z map'</span>)</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Apply uncorrected threshold</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>    zmapthresh <span class="op">=</span> zmap.copy()</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>    zmapthresh[np.<span class="bu">abs</span>(zmapthresh) <span class="op">&lt;</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Uncorrected thresholded Z map</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> axs[testi, <span class="dv">1</span>]</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    cf <span class="op">=</span> ax.contourf(tftimes, frex, zmapthresh, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'Uncorrected thresholded Z map'</span>)</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Apply cluster-level corrected threshold</span></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    clust_threshold <span class="op">=</span> np.percentile(max_clust_info[:, testi], <span class="dv">100</span> <span class="op">-</span> mcc_cluster_pval <span class="op">*</span> <span class="dv">100</span>)</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Find islands and remove those smaller than cluster size threshold</span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    labeled_array, num_features <span class="op">=</span> label(zmapthresh)</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    cluster_sizes <span class="op">=</span> np.array([np.<span class="bu">sum</span>(labeled_array <span class="op">==</span> i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, num_features <span class="op">+</span> <span class="dv">1</span>)])</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Identify clusters to remove</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>    whichclusters2remove <span class="op">=</span> np.where(cluster_sizes <span class="op">&lt;</span> clust_threshold)[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span>  <span class="co"># +1 for 1-based indexing</span></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove clusters</span></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> clust <span class="kw">in</span> whichclusters2remove:</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>        zmapthresh[labeled_array <span class="op">==</span> clust] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Cluster-corrected Z map</span></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> axs[testi, <span class="dv">2</span>]</span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>    cf <span class="op">=</span> ax.contourf(tftimes, frex, zmapthresh, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'Cluster-corrected Z map'</span>)</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter34_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 34.7</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate random data</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> np.random.rand(<span class="dv">10000</span>, <span class="dv">1</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> np.random.rand(<span class="dv">10000</span>, <span class="dv">1</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create figure and axes</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram of 'a'</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plt.subplot(<span class="dv">221</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>ax.hist(a, bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">0.75</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="op">-</span><span class="fl">.05</span>, <span class="fl">1.05</span>])</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram of 'b'</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plt.subplot(<span class="dv">222</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>ax.hist(b, bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">0.75</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="op">-</span><span class="fl">.05</span>, <span class="fl">1.05</span>])</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram of the differences (using Fisher's Z transformation)</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>ax.hist(np.arctanh(a <span class="op">-</span> b), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">0.75</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>])</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'ITPC differences'</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Difference value'</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Count'</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter34_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 34.8</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The code to produce this figure is presented in chapter19.m, between the</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># cells for figures 19.6 and 19.7. To generate figure 34.8, you will need to run</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># the code for figures 19.2-6.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 34.9</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>voxel_pval <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>cluster_pval <span class="op">=</span> <span class="fl">0.05</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: try to use 1000 or more permutations for real data</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>n_permutes <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute actual ITPC</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>realitpc <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(eegphase, axis<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize null hypothesis matrices</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>permuted_maxvals <span class="op">=</span> np.zeros((n_permutes, <span class="dv">2</span>, num_frex))</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>permuted_vals <span class="op">=</span> np.zeros((n_permutes, num_frex, EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>max_clust_info <span class="op">=</span> np.zeros(n_permutes)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>eegtemp <span class="op">=</span> np.zeros(eegphase.shape, dtype<span class="op">=</span><span class="bu">complex</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> permi <span class="kw">in</span> <span class="bu">range</span>(n_permutes):</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> triali <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        cutpoint <span class="op">=</span> np.random.choice(<span class="bu">range</span>(<span class="dv">2</span>, nTimepoints <span class="op">-</span> <span class="dv">1</span>))</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Permute phase values</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        eegtemp[:, :, triali] <span class="op">=</span> np.roll(eegphase[:, :, triali], cutpoint, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    permuted_vals[permi, :, :] <span class="op">=</span> np.<span class="bu">abs</span>(np.mean(eegtemp, axis<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>zmap <span class="op">=</span> (realitpc <span class="op">-</span> np.mean(permuted_vals, axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> np.std(permuted_vals, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>threshmean <span class="op">=</span> realitpc.copy()</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>threshmean[np.<span class="bu">abs</span>(zmap) <span class="op">&lt;</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the figures for Figure 34.9</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Power map</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], frex, realitpc, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1000</span>])</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Power map'</span>)</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Unthresholded Z map</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">1</span>]</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], frex, zmap, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1000</span>])</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Unthresholded Z map'</span>)</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncorrected power map</span></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">0</span>]</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], frex, threshmean, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1000</span>])</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Uncorrected power map'</span>)</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a><span class="co"># this time, the cluster correction will be done on the permuted data, thus</span></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a><span class="co"># making no assumptions about parameters for p-values</span></span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> permi <span class="kw">in</span> <span class="bu">range</span>(n_permutes):</span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Cluster correction</span></span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>    fakecorrsz <span class="op">=</span> (permuted_vals[permi, :, :] <span class="op">-</span> np.mean(permuted_vals, axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> np.std(permuted_vals, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>    fakecorrsz[np.<span class="bu">abs</span>(fakecorrsz) <span class="op">&lt;</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get number of elements in largest supra-threshold cluster</span></span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>    labeled_array, num_features <span class="op">=</span> label(fakecorrsz)</span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>    max_clust_info[permi] <span class="op">=</span> np.<span class="bu">max</span>([<span class="dv">0</span>] <span class="op">+</span> [np.<span class="bu">sum</span>(labeled_array <span class="op">==</span> i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, num_features <span class="op">+</span> <span class="dv">1</span>)])</span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Cluster-corrected Z map</span></span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply cluster-level corrected threshold</span></span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>zmapthresh <span class="op">=</span> realitpc.copy()</span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>zmapthresh[np.<span class="bu">abs</span>(zmap) <span class="op">&lt;</span> norm.ppf(<span class="dv">1</span> <span class="op">-</span> voxel_pval)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Find islands and remove those smaller than cluster size threshold</span></span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>labeled_array, num_features <span class="op">=</span> label(zmapthresh)</span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>cluster_sizes <span class="op">=</span> np.array([np.<span class="bu">sum</span>(labeled_array <span class="op">==</span> i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, num_features <span class="op">+</span> <span class="dv">1</span>)])</span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>clust_threshold <span class="op">=</span> np.percentile(max_clust_info, <span class="dv">100</span> <span class="op">-</span> cluster_pval <span class="op">*</span> <span class="dv">100</span>)</span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify clusters to remove</span></span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>whichclusters2remove <span class="op">=</span> np.where(cluster_sizes <span class="op">&lt;</span> clust_threshold)[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span>  <span class="co"># +1 for 1-based indexing</span></span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove clusters</span></span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> clust <span class="kw">in</span> whichclusters2remove:</span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>    zmapthresh[labeled_array <span class="op">==</span> clust] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> ax.contourf(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], frex, zmapthresh, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, levels<span class="op">=</span><span class="dv">256</span>)</span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1000</span>])</span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Cluster-corrected Z map'</span>)</span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter34_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 33.5</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The code for figures 33.5/6 are presented here and in the next cell. You</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># will need first to run the code for figure 34.3 to run this code.</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute actual t-test of difference (using unequal N and std)</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>tnum <span class="op">=</span> np.mean(eegpower[<span class="dv">3</span>, <span class="dv">399</span>, real_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>]) <span class="op">-</span> np.mean(eegpower[<span class="dv">3</span>, <span class="dv">399</span>, real_condition_mapping <span class="op">==</span> <span class="dv">1</span>])</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>tdenom <span class="op">=</span> np.sqrt((np.std(eegpower[<span class="dv">3</span>, <span class="dv">399</span>, real_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>], ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(real_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                 (np.std(eegpower[<span class="dv">3</span>, <span class="dv">399</span>, real_condition_mapping <span class="op">==</span> <span class="dv">1</span>], ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(real_condition_mapping <span class="op">==</span> <span class="dv">1</span>))</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>real_t <span class="op">=</span> tnum <span class="op">/</span> tdenom</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up the range of permutations to test</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>n_permutes_range <span class="op">=</span> np.<span class="bu">round</span>(np.linspace(<span class="dv">100</span>, <span class="dv">3000</span>, <span class="dv">200</span>)).astype(<span class="bu">int</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>zvals <span class="op">=</span> np.zeros(<span class="bu">len</span>(n_permutes_range))</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the permutation test for different numbers of permutations</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> idx, n_permutes <span class="kw">in</span> <span class="bu">enumerate</span>(n_permutes_range):</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    permuted_tvals <span class="op">=</span> np.zeros(n_permutes)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate null hypothesis parameter distributions</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> permi <span class="kw">in</span> <span class="bu">range</span>(n_permutes):</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>        fake_condition_mapping <span class="op">=</span> np.sign(np.random.randn(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>        tnum <span class="op">=</span> np.mean(eegpower[<span class="dv">3</span>, <span class="dv">399</span>, fake_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>]) <span class="op">-</span> np.mean(eegpower[<span class="dv">3</span>, <span class="dv">399</span>, fake_condition_mapping <span class="op">==</span> <span class="dv">1</span>])</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>        tdenom <span class="op">=</span> np.sqrt((np.std(eegpower[<span class="dv">3</span>, <span class="dv">399</span>, fake_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>], ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(fake_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>                         (np.std(eegpower[<span class="dv">3</span>, <span class="dv">399</span>, fake_condition_mapping <span class="op">==</span> <span class="dv">1</span>], ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(fake_condition_mapping <span class="op">==</span> <span class="dv">1</span>))</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>        permuted_tvals[permi] <span class="op">=</span> tnum <span class="op">/</span> tdenom</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    zvals[idx] <span class="op">=</span> (real_t <span class="op">-</span> np.mean(permuted_tvals)) <span class="op">/</span> np.std(permuted_tvals)</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the stability of Z-value as a function of the number of permutations</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">8</span>))</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Z-values</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">0</span>]</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>ax.plot(n_permutes_range, zvals, marker<span class="op">=</span><span class="st">'o'</span>, linestyle<span class="op">=</span><span class="st">'-'</span>)</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Number of permutations'</span>)</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Z-value'</span>)</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Stability of Z-value'</span>)</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram of Z-values</span></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">1</span>]</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>ax.hist(zvals, bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">0.75</span>)</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Z-value'</span>)</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Count'</span>)</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Histogram of Z-values at different runs of permutation test'</span>)</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter34_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tnum <span class="op">/</span> tdenom</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="41">
+<pre><code>array([[ 0.6900473 ,  0.69906177,  0.70821306, ...,  1.51976739,
+         1.50579183,  1.48970955],
+       [ 1.13221693,  1.14380985,  1.1557384 , ...,  1.39210632,
+         1.38067992,  1.36761409],
+       [ 1.4598731 ,  1.47179132,  1.48407068, ...,  1.09183971,
+         1.10015209,  1.10712079],
+       ...,
+       [-1.05518666, -1.03844323, -1.00849262, ...,  1.99556023,
+         1.88482516,  1.78384207],
+       [-1.61870042, -1.59936762, -1.56654329, ...,  1.79811917,
+         1.66377941,  1.53064692],
+       [-1.43522339, -1.44002911, -1.43904482, ...,  0.08468227,
+         0.09266911,  0.08359325]])</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>real_t</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<pre><code>array([[ 1.92409318,  1.93799449,  1.95104155, ..., -0.88392747,
+        -0.88830475, -0.89335801],
+       [ 2.08568485,  2.09873798,  2.11051953, ..., -0.7674469 ,
+        -0.75174094, -0.73673116],
+       [ 1.87780796,  1.87858681,  1.87730406, ..., -0.29878025,
+        -0.28154403, -0.26507296],
+       ...,
+       [-1.16226796, -1.09787529, -1.03706577, ..., -1.98438195,
+        -2.05500952, -2.11943243],
+       [-1.02458395, -0.91130896, -0.81098154, ..., -1.61005073,
+        -1.60534137, -1.59837314],
+       [-0.05420381, -0.04360291, -0.04128698, ..., -1.76290619,
+        -1.82481761, -1.88206451]])</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 33.6</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute actual t-test of difference (using unequal N and std)</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>tnum <span class="op">=</span> np.mean(eegpower[:, :, real_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>) <span class="op">-</span> np.mean(eegpower[:, :, real_condition_mapping <span class="op">==</span> <span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>tdenom <span class="op">=</span> np.sqrt((np.std(eegpower[:, :, real_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>, ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(real_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                 (np.std(eegpower[:, :, real_condition_mapping <span class="op">==</span> <span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>, ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(real_condition_mapping <span class="op">==</span> <span class="dv">1</span>))</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>real_t <span class="op">=</span> tnum <span class="op">/</span> tdenom</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up the range of permutations to test</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>n_permutes_range <span class="op">=</span> np.<span class="bu">round</span>(np.linspace(<span class="dv">100</span>, <span class="dv">3000</span>, <span class="dv">200</span>)).astype(<span class="bu">int</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>zvals <span class="op">=</span> np.zeros((<span class="bu">len</span>(n_permutes_range), tnum.shape[<span class="dv">0</span>], tnum.shape[<span class="dv">1</span>]))</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the permutation test for different numbers of permutations</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> grandpermi, n_permutes <span class="kw">in</span> <span class="bu">enumerate</span>(n_permutes_range):</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    permuted_tvals <span class="op">=</span> np.zeros((n_permutes, tnum.shape[<span class="dv">0</span>], tnum.shape[<span class="dv">1</span>]))</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate null hypothesis parameter distributions</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> permi <span class="kw">in</span> <span class="bu">range</span>(n_permutes):</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>        fake_condition_mapping <span class="op">=</span> np.sign(np.random.randn(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>        tnum <span class="op">=</span> np.mean(eegpower[:, :, fake_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>) <span class="op">-</span> np.mean(eegpower[:, :, fake_condition_mapping <span class="op">==</span> <span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>        tdenom <span class="op">=</span> np.sqrt((np.std(eegpower[:, :, fake_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>, ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(fake_condition_mapping <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>                         (np.std(eegpower[:, :, fake_condition_mapping <span class="op">==</span> <span class="dv">1</span>], axis<span class="op">=</span><span class="dv">2</span>, ddof<span class="op">=</span><span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.<span class="bu">sum</span>(fake_condition_mapping <span class="op">==</span> <span class="dv">1</span>))</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>        permuted_tvals[permi, :, :] <span class="op">=</span> tnum <span class="op">/</span> tdenom</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    zvals[grandpermi, :, :] <span class="op">=</span> (real_t <span class="op">-</span> np.mean(permuted_tvals, axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> np.std(permuted_tvals, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the stability of Z-value as a function of the number of permutations for the selected time-frequency point</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">8</span>))</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Z-values for the selected time-frequency point</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">0</span>]</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>ax.plot(n_permutes_range, zvals[:, <span class="dv">3</span>, <span class="dv">399</span>], linestyle<span class="op">=</span><span class="st">'-'</span>)</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram of Z-values for the selected time-frequency point</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs[<span class="dv">1</span>]</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>ax.hist(zvals[:, <span class="dv">3</span>, <span class="dv">399</span>], bins<span class="op">=</span><span class="dv">30</span>, alpha<span class="op">=</span><span class="fl">0.75</span>)</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the average and standard deviation of Z-statistics across all time-frequency points</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>zvals_all <span class="op">=</span> zvals.reshape(<span class="bu">len</span>(n_permutes_range), num_frex <span class="op">*</span> nTimepoints)</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>ax.plot(np.mean(zvals_all, axis<span class="op">=</span><span class="dv">0</span>), np.std(zvals_all, axis<span class="op">=</span><span class="dv">0</span>), <span class="st">'o'</span>)</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="op">-</span><span class="fl">3.5</span>, <span class="fl">3.5</span>])</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>ax.set_ylim([<span class="dv">0</span>, <span class="fl">0.12</span>])</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Average Z-statistic'</span>)</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Standard deviation of Z-statistics'</span>)</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>z0 <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(np.mean(zvals_all, axis<span class="op">=</span><span class="dv">0</span>)))</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>x0, y0 <span class="op">=</span> np.unravel_index(z0, tnum.shape)</span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>yy, xx <span class="op">=</span> np.histogram(zvals[:, x0, y0], bins<span class="op">=</span><span class="dv">30</span>)</span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> np.diff(xx)  <span class="co"># Calculate the width of each bin</span></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>center <span class="op">=</span> (xx[:<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> xx[<span class="dv">1</span>:]) <span class="op">/</span> <span class="dv">2</span>  <span class="co"># Calculate the center of each bin</span></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> plt.bar(center, yy, width<span class="op">=</span>width, align<span class="op">=</span><span class="st">'center'</span>)</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>z2 <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(np.mean(zvals_all, axis<span class="op">=</span><span class="dv">0</span>)<span class="op">-</span><span class="dv">2</span>))</span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>x2, y2 <span class="op">=</span> np.unravel_index(z2, tnum.shape)</span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a>yy, xx <span class="op">=</span> np.histogram(zvals[:, x2, y2], bins<span class="op">=</span><span class="dv">30</span>)</span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> np.diff(xx)  <span class="co"># Calculate the width of each bin</span></span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>center <span class="op">=</span> (xx[:<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> xx[<span class="dv">1</span>:]) <span class="op">/</span> <span class="dv">2</span>  <span class="co"># Calculate the center of each bin</span></span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> plt.bar(center, yy, width<span class="op">=</span>width, align<span class="op">=</span><span class="st">'center'</span>)</span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>z3 <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(np.mean(zvals_all, axis<span class="op">=</span><span class="dv">0</span>)<span class="op">+</span><span class="dv">3</span>))</span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a>x3, y3 <span class="op">=</span> np.unravel_index(z3, tnum.shape)</span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a>yy, xx <span class="op">=</span> np.histogram(zvals[:, x3, y3], bins<span class="op">=</span><span class="dv">30</span>)</span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> np.diff(xx)  <span class="co"># Calculate the width of each bin</span></span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a>center <span class="op">=</span> (xx[:<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> xx[<span class="dv">1</span>:]) <span class="op">/</span> <span class="dv">2</span>  <span class="co"># Calculate the center of each bin</span></span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> plt.bar(center, yy, width<span class="op">=</span>width, align<span class="op">=</span><span class="st">'center'</span>)</span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="fl">3.5</span>, <span class="fl">3.5</span>])</span>
+<span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Z-value'</span>)</span>
+<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Count of possible z-values'</span>)</span>
+<span id="cb16-77"><a href="#cb16-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-78"><a href="#cb16-78" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter34_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter34_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter34_files/figure-html/cell-15-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

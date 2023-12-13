@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>AnalyzingNeuralTimeSeries-Python - Chapter 23</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="AnalyzingNeuralTimeSeries-Python - Chapter 23">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://agencyenterprise.github.io/AnalyzingNeuralTimeSeries-Python/chapter23_files/figure-html/cell-3-output-1.png">
+<meta property="og:site-name" content="AnalyzingNeuralTimeSeries-Python">
+<meta property="og:image:height" content="470">
+<meta property="og:image:width" content="337">
+<meta name="twitter:title" content="AnalyzingNeuralTimeSeries-Python - Chapter 23">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://agencyenterprise.github.io/AnalyzingNeuralTimeSeries-Python/chapter23_files/figure-html/cell-3-output-1.png">
+<meta name="twitter:image-height" content="470">
+<meta name="twitter:image-width" content="337">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">AnalyzingNeuralTimeSeries-Python</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter23.html">Chapter 23</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AnalyzingNeuralTimeSeries-Python</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 2</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4a</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4b</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4c</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter22.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter23.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Chapter 23</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter25.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 25</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter26.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 26</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter27.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 27</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter28.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 28</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter29.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 29</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter30.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 30</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter31.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 31</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter33.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 33</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter34.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 34</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#analyzing-neural-time-series-data" id="toc-analyzing-neural-time-series-data" class="nav-link active" data-scroll-target="#analyzing-neural-time-series-data">Analyzing Neural Time Series Data</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/agencyenterprise/AnalyzingNeuralTimeSeries-Python/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Chapter 23</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="analyzing-neural-time-series-data" class="level3">
+<h3 class="anchored" data-anchor-id="analyzing-neural-time-series-data">Analyzing Neural Time Series Data</h3>
+<p>Python code for Chapter 23 – converted from original Matlab by AE Studio (and ChatGPT)<br>
+Original Matlab code by Mike X Cohen</p>
+<p>This code accompanies the book, titled “Analyzing Neural Time Series Data” (MIT Press).<br>
+Using the code without following the book may lead to confusion, incorrect data analyses, and misinterpretations of results.<br>
+Mike X Cohen and AE Studio assume no responsibility for inappropriate or incorrect use of this code.</p>
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import necessary libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.io <span class="im">import</span> loadmat</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.signal <span class="im">import</span> firls, filtfilt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.fftpack <span class="im">import</span> fft, ifft</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mne <span class="im">import</span> create_info, EvokedArray</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mne.channels <span class="im">import</span> make_dig_montage</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 23.2</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load sample data</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>EEG <span class="op">=</span> loadmat(<span class="st">'../data/sampleEEGdata.mat'</span>)[<span class="st">'EEG'</span>][<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute ERP</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>erp <span class="op">=</span> np.mean(EEG[<span class="st">'data'</span>], axis<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Subtract mean and compute covariance</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>erp <span class="op">=</span> erp <span class="op">-</span> np.mean(erp, axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>covar <span class="op">=</span> np.dot(erp, erp.T) <span class="op">/</span> (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot covariance of ERP</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">311</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>plt.imshow(covar, aspect<span class="op">=</span><span class="st">'equal'</span>, clim<span class="op">=</span>[<span class="op">-</span><span class="dv">1</span>, <span class="dv">5</span>])</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>xticks <span class="op">=</span> [<span class="dv">20</span>, <span class="dv">40</span>, <span class="dv">60</span>]</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>yticks <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">60</span>]</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>plt.xticks(xticks)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>plt.yticks(yticks)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>plt.gca().set_xticklabels([EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="st">'labels'</span>][tick<span class="op">-</span><span class="dv">1</span>][<span class="dv">0</span>] <span class="cf">for</span> tick <span class="kw">in</span> xticks])</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>plt.gca().set_yticklabels([EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="st">'labels'</span>][tick<span class="op">-</span><span class="dv">1</span>][<span class="dv">0</span>] <span class="cf">for</span> tick <span class="kw">in</span> yticks])</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Covariance of ERP'</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># One covariance of all timepoints</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>eeg <span class="op">=</span> np.reshape(EEG[<span class="st">'data'</span>], (EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">*</span> EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>eeg <span class="op">=</span> eeg <span class="op">-</span> np.mean(eeg, axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>covar <span class="op">=</span> np.dot(eeg, eeg.T) <span class="op">/</span> (<span class="bu">len</span>(eeg) <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot covariance of single-trial EEG</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">312</span>)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>plt.imshow(covar, aspect<span class="op">=</span><span class="st">'equal'</span>, clim<span class="op">=</span>[<span class="dv">20000</span>, <span class="dv">150000</span>])</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>xticks <span class="op">=</span> [<span class="dv">20</span>, <span class="dv">40</span>, <span class="dv">60</span>]</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>yticks <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">60</span>]</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>plt.xticks(xticks)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>plt.yticks(yticks)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>plt.gca().set_xticklabels([EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="st">'labels'</span>][tick<span class="op">-</span><span class="dv">1</span>][<span class="dv">0</span>] <span class="cf">for</span> tick <span class="kw">in</span> xticks])</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>plt.gca().set_yticklabels([EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="st">'labels'</span>][tick<span class="op">-</span><span class="dv">1</span>][<span class="dv">0</span>] <span class="cf">for</span> tick <span class="kw">in</span> yticks])</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Covariance of single-trial EEG'</span>)</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Average single-trial covariances</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>covar <span class="op">=</span> np.zeros((EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    eeg <span class="op">=</span> EEG[<span class="st">'data'</span>][:, :, i] <span class="op">-</span> np.mean(EEG[<span class="st">'data'</span>][:, :, i], axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    covar <span class="op">+=</span> np.dot(eeg, eeg.T) <span class="op">/</span> (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>covar <span class="op">/=</span> i</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot average covariance of single-trial EEG</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">313</span>)</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>plt.imshow(covar, aspect<span class="op">=</span><span class="st">'equal'</span>, clim<span class="op">=</span>[<span class="dv">20</span>, <span class="dv">150</span>])</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>xticks <span class="op">=</span> [<span class="dv">20</span>, <span class="dv">40</span>, <span class="dv">60</span>]</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>yticks <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">60</span>]</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>plt.xticks(xticks)</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>plt.yticks(yticks)</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>plt.gca().set_xticklabels([EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="st">'labels'</span>][tick<span class="op">-</span><span class="dv">1</span>][<span class="dv">0</span>] <span class="cf">for</span> tick <span class="kw">in</span> xticks])</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>plt.gca().set_yticklabels([EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="st">'labels'</span>][tick<span class="op">-</span><span class="dv">1</span>][<span class="dv">0</span>] <span class="cf">for</span> tick <span class="kw">in</span> yticks])</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Average covariance of single-trial EEG'</span>)</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 23.3</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute covariance of ERP</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>erp <span class="op">=</span> np.mean(EEG[<span class="st">'data'</span>], axis<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>erp <span class="op">=</span> erp <span class="op">-</span> np.mean(erp, axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>covar <span class="op">=</span> np.dot(erp, erp.T) <span class="op">/</span> (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># PCA via eigenvalue decomposition</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>eigvals, pc <span class="op">=</span> np.linalg.eig(covar)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>pc <span class="op">=</span> pc[:, np.argsort(<span class="op">-</span>eigvals)]</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>eigvals <span class="op">=</span> np.sort(eigvals)[::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>eigvals <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> eigvals <span class="op">/</span> np.<span class="bu">sum</span>(eigvals)  <span class="co"># Convert to percent change</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># create channel montage </span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>chan_labels <span class="op">=</span> [chan[<span class="st">'labels'</span>][<span class="dv">0</span>] <span class="cf">for</span> chan <span class="kw">in</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>]]</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> np.vstack([<span class="op">-</span><span class="dv">1</span><span class="op">*</span>EEG[<span class="st">'chanlocs'</span>][<span class="st">'Y'</span>], EEG[<span class="st">'chanlocs'</span>][<span class="st">'X'</span>], EEG[<span class="st">'chanlocs'</span>][<span class="st">'Z'</span>]]).T</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># remove channels outside of head</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>exclude_chans <span class="op">=</span> np.where(np.array([chan[<span class="st">'radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="cf">for</span> chan <span class="kw">in</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>]]) <span class="op">&gt;</span> <span class="fl">0.54</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> np.delete(coords, exclude_chans, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>chan_labels <span class="op">=</span> np.delete(chan_labels, exclude_chans)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>pc_lp <span class="op">=</span> np.delete(pc, exclude_chans, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>montage <span class="op">=</span> make_dig_montage(ch_pos<span class="op">=</span><span class="bu">dict</span>(<span class="bu">zip</span>(chan_labels, coords)), coord_frame<span class="op">=</span><span class="st">'head'</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># create MNE Info and Evoked object</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>info <span class="op">=</span> create_info(<span class="bu">list</span>(chan_labels), EEG[<span class="st">'srate'</span>], ch_types<span class="op">=</span><span class="st">'eeg'</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the first 9 principal components</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">9</span>):</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    plt.figure(<span class="dv">102</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> plt.subplot(<span class="dv">3</span>, <span class="dv">3</span>, i <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    evoked <span class="op">=</span> EvokedArray(pc_lp[:, i, np.newaxis], info, tmin<span class="op">=</span>EEG[<span class="st">'xmin'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    evoked.set_montage(montage)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    evoked.plot_topomap(sensors<span class="op">=</span><span class="va">False</span>, sphere<span class="op">=</span>EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="dv">0</span>][<span class="st">'sph_radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">'jet'</span>, axes<span class="op">=</span>ax, show<span class="op">=</span><span class="va">False</span>, times<span class="op">=-</span><span class="dv">1</span>, time_format<span class="op">=</span><span class="st">''</span>, colorbar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f'PC #</span><span class="sc">{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">, eigval=</span><span class="sc">{</span>eigvals[i]<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    plt.figure(<span class="dv">101</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">9</span>, <span class="dv">1</span>, i <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    plt.plot(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], pc[:, i].T <span class="op">@</span> erp)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    plt.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    plt.xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1200</span>])</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f'PC #</span><span class="sc">{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">, eigval=</span><span class="sc">{</span>eigvals[i]<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Average single-trial covariances</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>covar <span class="op">=</span> np.zeros((EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    eeg <span class="op">=</span> EEG[<span class="st">'data'</span>][:, :, i] <span class="op">-</span> np.mean(EEG[<span class="st">'data'</span>][:, :, i], axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    covar <span class="op">+=</span> np.dot(eeg, eeg.T) <span class="op">/</span> (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>covar <span class="op">/=</span> EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="co"># PCA via eigenvalue decomposition</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>eigvals, pc <span class="op">=</span> np.linalg.eig(covar)</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>pc <span class="op">=</span> pc[:, np.argsort(<span class="op">-</span>eigvals)]</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>eigvals <span class="op">=</span> np.sort(eigvals)[::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>eigvals <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> eigvals <span class="op">/</span> np.<span class="bu">sum</span>(eigvals)  <span class="co"># Convert to percent change</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>pc_lp <span class="op">=</span> np.delete(pc, exclude_chans, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the first 9 principal components</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">9</span>):</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>    plt.figure(<span class="dv">10</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> plt.subplot(<span class="dv">3</span>, <span class="dv">3</span>, i <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    evoked <span class="op">=</span> EvokedArray(pc_lp[:, i, np.newaxis], info, tmin<span class="op">=</span>EEG[<span class="st">'xmin'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>    evoked.set_montage(montage)</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>    evoked.plot_topomap(sensors<span class="op">=</span><span class="va">False</span>, sphere<span class="op">=</span>EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="dv">0</span>][<span class="st">'sph_radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">'jet'</span>, axes<span class="op">=</span>ax, show<span class="op">=</span><span class="va">False</span>, times<span class="op">=-</span><span class="dv">1</span>, time_format<span class="op">=</span><span class="st">''</span>, colorbar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f'PC #</span><span class="sc">{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">, eigval=</span><span class="sc">{</span>eigvals[i]<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>    plt.figure(<span class="dv">11</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> plt.subplot(<span class="dv">9</span>, <span class="dv">1</span>, i <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>    pctimes <span class="op">=</span> np.zeros(EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> triali <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>        eeg <span class="op">=</span> EEG[<span class="st">'data'</span>][:, :, triali] <span class="op">-</span> np.mean(EEG[<span class="st">'data'</span>][:, :, triali], axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>        pctimes <span class="op">+=</span> pc[:, i].T <span class="op">@</span> eeg</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    plt.plot(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], pctimes <span class="op">/</span> EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>    plt.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    plt.xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1200</span>])</span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f'PC #</span><span class="sc">{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">, eigval=</span><span class="sc">{</span>eigvals[i]<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-4-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-4-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-4-output-4.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tangent</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># An easily made mistake is to confuse the dimension order of the PC matrix. </span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># To be sure you have the correct orientation, plot the first component; </span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># it should have a spatially broad ERP-like distribution.</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create channel montage </span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>chan_labels <span class="op">=</span> [chan[<span class="st">'labels'</span>][<span class="dv">0</span>] <span class="cf">for</span> chan <span class="kw">in</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>]]</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> np.vstack([<span class="op">-</span><span class="dv">1</span><span class="op">*</span>EEG[<span class="st">'chanlocs'</span>][<span class="st">'Y'</span>], EEG[<span class="st">'chanlocs'</span>][<span class="st">'X'</span>], EEG[<span class="st">'chanlocs'</span>][<span class="st">'Z'</span>]]).T</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>montage <span class="op">=</span> make_dig_montage(ch_pos<span class="op">=</span><span class="bu">dict</span>(<span class="bu">zip</span>(chan_labels, coords)), coord_frame<span class="op">=</span><span class="st">'head'</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># create MNE Info and Evoked object</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>info <span class="op">=</span> create_info(<span class="bu">list</span>(chan_labels), EEG[<span class="st">'srate'</span>], ch_types<span class="op">=</span><span class="st">'eeg'</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the first principal component to ensure correct orientation</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>evoked <span class="op">=</span> EvokedArray(pc[:, <span class="dv">0</span>, np.newaxis], info, tmin<span class="op">=</span>EEG[<span class="st">'xmin'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>evoked.set_montage(montage)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>evoked.plot_topomap(sphere<span class="op">=</span>EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="dv">0</span>][<span class="st">'sph_radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">'jet'</span>, axes<span class="op">=</span>axs[<span class="dv">0</span>], show<span class="op">=</span><span class="va">False</span>, times<span class="op">=-</span><span class="dv">1</span>, time_format<span class="op">=</span><span class="st">''</span>, colorbar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_title(<span class="st">'Correct orientation!'</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>evoked <span class="op">=</span> EvokedArray(pc[<span class="dv">0</span>, :, np.newaxis], info, tmin<span class="op">=</span>EEG[<span class="st">'xmin'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>evoked.set_montage(montage)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>evoked.plot_topomap(sphere<span class="op">=</span>EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="dv">0</span>][<span class="st">'sph_radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">'jet'</span>, axes<span class="op">=</span>axs[<span class="dv">1</span>], show<span class="op">=</span><span class="va">False</span>, times<span class="op">=-</span><span class="dv">1</span>, time_format<span class="op">=</span><span class="st">''</span>, colorbar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_title(<span class="st">'Incorrect orientation!'</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 23.4</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>pcanum <span class="op">=</span> <span class="dv">2</span> <span class="co"># 1 for panel A; 2 for panel B</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Average single-trial covariances</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>covar <span class="op">=</span> np.zeros((EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    eeg <span class="op">=</span> EEG[<span class="st">'data'</span>][:, :, i] <span class="op">-</span> np.mean(EEG[<span class="st">'data'</span>][:, :, i], axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    covar <span class="op">+=</span> np.dot(eeg, eeg.T) <span class="op">/</span> (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>covar <span class="op">/=</span> EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># PCA via eigenvalue decomposition</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>eigvals, pc <span class="op">=</span> np.linalg.eig(covar)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>pc <span class="op">=</span> pc[:, np.argsort(<span class="op">-</span>eigvals)]</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>eigvals <span class="op">=</span> np.sort(eigvals)[::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>eigvals <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> eigvals <span class="op">/</span> np.<span class="bu">sum</span>(eigvals)  <span class="co"># Convert to percent change</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Project the EEG data onto the chosen principal component for each trial</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>pcadata <span class="op">=</span> np.zeros((EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the PCA scores (projections) for the chosen component</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    pcadata[:, i] <span class="op">=</span> np.dot(pc[:, pcanum<span class="op">-</span><span class="dv">1</span>].T, EEG[<span class="st">'data'</span>][:, :, i] <span class="op">-</span> np.mean(EEG[<span class="st">'data'</span>][:, :, i], axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>min_freq <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>max_freq <span class="op">=</span> <span class="dv">80</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>num_frex <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Define wavelet parameters</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>], <span class="dv">1</span><span class="op">/</span>EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>frex <span class="op">=</span> np.logspace(np.log10(min_freq), np.log10(max_freq), num_frex)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> np.logspace(np.log10(<span class="dv">3</span>), np.log10(<span class="dv">10</span>), num_frex) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> frex)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Define convolution parameters</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>n_wavelet <span class="op">=</span> <span class="bu">len</span>(time)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>n_data <span class="op">=</span> EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">*</span> EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>n_convolution <span class="op">=</span> n_wavelet <span class="op">+</span> n_data <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>n_conv_pow2 <span class="op">=</span> <span class="bu">int</span>(<span class="dv">2</span><span class="op">**</span>np.ceil(np.log2(n_convolution)))</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>half_of_wavelet_size <span class="op">=</span> (n_wavelet <span class="op">-</span> <span class="dv">1</span>) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Get FFT of data</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>eegfft <span class="op">=</span> fft(pcadata.flatten(<span class="st">'F'</span>), n_conv_pow2)</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>eegpower <span class="op">=</span> np.zeros((num_frex, EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))  <span class="co"># frequencies X time X trials</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>baseidx <span class="op">=</span> [np.argmin(np.<span class="bu">abs</span>(EEG[<span class="st">'times'</span>][<span class="dv">0</span>] <span class="op">-</span> t)) <span class="cf">for</span> t <span class="kw">in</span> [<span class="op">-</span><span class="dv">500</span>, <span class="op">-</span><span class="dv">200</span>]]</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through frequencies and compute synchronization</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(num_frex):</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    wavelet <span class="op">=</span> fft(np.exp(<span class="dv">2</span> <span class="op">*</span> <span class="ot">1j</span> <span class="op">*</span> np.pi <span class="op">*</span> frex[fi] <span class="op">*</span> time) <span class="op">*</span> np.exp(<span class="op">-</span>time <span class="op">**</span> <span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> (s[fi] <span class="op">**</span> <span class="dv">2</span>))), n_conv_pow2)</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    eegconv <span class="op">=</span> ifft(wavelet <span class="op">*</span> eegfft)</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    eegconv <span class="op">=</span> eegconv[:n_convolution]</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    eegconv <span class="op">=</span> eegconv[half_of_wavelet_size:<span class="op">-</span>half_of_wavelet_size]</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>    temppower <span class="op">=</span> np.mean(np.<span class="bu">abs</span>(np.reshape(eegconv, (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)) <span class="op">**</span> <span class="dv">2</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>    eegpower[fi, :] <span class="op">=</span> <span class="dv">10</span> <span class="op">*</span> np.log10(temppower <span class="op">/</span> np.mean(temppower[baseidx[<span class="dv">0</span>]:baseidx[<span class="dv">1</span>]<span class="op">+</span><span class="dv">1</span>]))</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="co"># create channel montage </span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>chan_labels <span class="op">=</span> [chan[<span class="st">'labels'</span>][<span class="dv">0</span>] <span class="cf">for</span> chan <span class="kw">in</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>]]</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> np.vstack([<span class="op">-</span><span class="dv">1</span><span class="op">*</span>EEG[<span class="st">'chanlocs'</span>][<span class="st">'Y'</span>], EEG[<span class="st">'chanlocs'</span>][<span class="st">'X'</span>], EEG[<span class="st">'chanlocs'</span>][<span class="st">'Z'</span>]]).T</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="co"># remove channels outside of head</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>exclude_chans <span class="op">=</span> np.where(np.array([chan[<span class="st">'radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="cf">for</span> chan <span class="kw">in</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>]]) <span class="op">&gt;</span> <span class="fl">0.54</span>)</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> np.delete(coords, exclude_chans, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>chan_labels <span class="op">=</span> np.delete(chan_labels, exclude_chans)</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>pc_lp <span class="op">=</span> np.delete(pc, exclude_chans, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>montage <span class="op">=</span> make_dig_montage(ch_pos<span class="op">=</span><span class="bu">dict</span>(<span class="bu">zip</span>(chan_labels, coords)), coord_frame<span class="op">=</span><span class="st">'head'</span>)</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="co"># create MNE Info and Evoked object</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>info <span class="op">=</span> create_info(<span class="bu">list</span>(chan_labels), EEG[<span class="st">'srate'</span>], ch_types<span class="op">=</span><span class="st">'eeg'</span>)</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the results</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plt.subplot(<span class="dv">221</span>)</span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>evoked <span class="op">=</span> EvokedArray(pc_lp[:, pcanum<span class="op">-</span><span class="dv">1</span>, np.newaxis], info, tmin<span class="op">=</span>EEG[<span class="st">'xmin'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>evoked.set_montage(montage)</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>evoked.plot_topomap(sphere<span class="op">=</span>EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="dv">0</span>][<span class="st">'sph_radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">'jet'</span>, axes<span class="op">=</span>ax, show<span class="op">=</span><span class="va">False</span>, times<span class="op">=-</span><span class="dv">1</span>, time_format<span class="op">=</span><span class="st">''</span>, colorbar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">222</span>)</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>plt.plot(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], np.mean(pcadata, axis<span class="op">=</span><span class="dv">1</span>))</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1200</span>])</span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>plt.contourf(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], frex, eegpower, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'jet'</span>)</span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>plt.clim([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>])</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1000</span>])</span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>plt.yscale(<span class="st">'log'</span>)</span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>plt.yticks(np.logspace(np.log10(min_freq), np.log10(max_freq), <span class="dv">6</span>))</span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>plt.gca().set_yticklabels([<span class="ss">f'</span><span class="sc">{</span>f<span class="sc">:.1f}</span><span class="ss">'</span> <span class="cf">for</span> f <span class="kw">in</span> np.logspace(np.log10(min_freq), np.log10(max_freq), <span class="dv">6</span>)])</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'TF power from component </span><span class="sc">{</span>pcanum<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 23.5</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Recompute PCA</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>covar <span class="op">=</span> np.zeros((EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    eeg <span class="op">=</span> EEG[<span class="st">'data'</span>][:, :, i] <span class="op">-</span> np.mean(EEG[<span class="st">'data'</span>][:, :, i], axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    covar <span class="op">+=</span> np.dot(eeg, eeg.T) <span class="op">/</span> (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>covar <span class="op">/=</span> EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>eigvals, pc <span class="op">=</span> np.linalg.eig(covar)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>eigvals <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.sort(eigvals)[::<span class="op">-</span><span class="dv">1</span>] <span class="op">/</span> np.<span class="bu">sum</span>(eigvals)  <span class="co"># Convert to percent change</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot eigenvalues as percent variance accounted for</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>plt.plot(np.arange(<span class="dv">1</span>, <span class="bu">len</span>(eigvals)<span class="op">+</span><span class="dv">1</span>), eigvals, <span class="st">'-o'</span>, markerfacecolor<span class="op">=</span><span class="st">'w'</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">70</span>])</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">65</span>])</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Amount of variance expected by chance, computed analytically</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">1</span>, EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]], [<span class="dv">100</span> <span class="op">/</span> EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]] <span class="op">*</span> <span class="dv">2</span>, <span class="st">'k'</span>)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Amount of variance expected by chance, computed based on random data</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>nperms <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>permeigvals <span class="op">=</span> np.zeros((nperms, EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> permi <span class="kw">in</span> <span class="bu">range</span>(nperms):</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Randomize ERP time points within each channel</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    randdat <span class="op">=</span> np.copy(erp)</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ch <span class="kw">in</span> <span class="bu">range</span>(erp.shape[<span class="dv">0</span>]):</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        np.random.shuffle(randdat[ch, :])</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute covariance matrix of the randomized data</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    covar <span class="op">=</span> np.dot(randdat, randdat.T) <span class="op">/</span> (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Perform eigenvalue decomposition</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    eigvals, pc <span class="op">=</span> np.linalg.eig(covar)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    eigvals <span class="op">=</span> np.sort(eigvals)[::<span class="op">-</span><span class="dv">1</span>]  <span class="co"># Sort eigenvalues in descending order</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    permeigvals[permi, :] <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> eigvals <span class="op">/</span> np.<span class="bu">sum</span>(eigvals)  <span class="co"># Convert to percent change</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>plt.plot(np.arange(<span class="dv">1</span>, <span class="bu">len</span>(np.mean(permeigvals, axis<span class="op">=</span><span class="dv">0</span>))<span class="op">+</span><span class="dv">1</span>), np.mean(permeigvals, axis<span class="op">=</span><span class="dv">0</span>), <span class="st">'r-o'</span>, markerfacecolor<span class="op">=</span><span class="st">'w'</span>)</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>plt.legend([<span class="st">'% var. accounted for'</span>, <span class="st">'chance-level (alg)'</span>, <span class="st">'chance-level (perm.test)'</span>])</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 23.6</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameters</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>whichcomp <span class="op">=</span> <span class="dv">1</span> <span class="co"># 1 for panel A; 2 for panel B</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>centertimes <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">200</span>, <span class="dv">1201</span>, <span class="dv">50</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>timewindow <span class="op">=</span> <span class="dv">200</span>  <span class="co"># ms on either side of center times</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>maptimes <span class="op">=</span> np.array([<span class="op">-</span><span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">500</span>, <span class="dv">1000</span>] <span class="cf">if</span> whichcomp <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> [<span class="dv">0</span>, <span class="dv">300</span>, <span class="dv">750</span>, <span class="dv">1000</span>])</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>clim <span class="op">=</span> (<span class="dv">80000</span>, <span class="dv">150000</span>) <span class="cf">if</span> whichcomp <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> (<span class="op">-</span><span class="dv">200000</span>, <span class="dv">200000</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize variables</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>pcvariance <span class="op">=</span> np.zeros(<span class="bu">len</span>(centertimes))</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>firstpcas <span class="op">=</span> np.zeros((<span class="bu">len</span>(centertimes), EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>timesidx <span class="op">=</span> [np.argmin(np.<span class="bu">abs</span>(EEG[<span class="st">'times'</span>][<span class="dv">0</span>] <span class="op">-</span> t)) <span class="cf">for</span> t <span class="kw">in</span> centertimes]</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>timewinidx <span class="op">=</span> <span class="bu">round</span>(timewindow <span class="op">/</span> (<span class="dv">1000</span> <span class="op">/</span> EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>mapsidx <span class="op">=</span> [np.argmin(np.<span class="bu">abs</span>(centertimes <span class="op">-</span> t)) <span class="cf">for</span> t <span class="kw">in</span> maptimes]</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform temporally localized PCA</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ti, center_time <span class="kw">in</span> <span class="bu">enumerate</span>(centertimes):</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Temporally localized covariance</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    covar <span class="op">=</span> np.zeros((EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        eeg <span class="op">=</span> EEG[<span class="st">'data'</span>][:, timesidx[ti] <span class="op">-</span> timewinidx:timesidx[ti] <span class="op">+</span> timewinidx <span class="op">+</span> <span class="dv">1</span>, i]</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        eeg <span class="op">=</span> eeg <span class="op">-</span> np.mean(eeg, axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        covar <span class="op">+=</span> np.dot(eeg, eeg.T) <span class="op">/</span> (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    covar <span class="op">/=</span> EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># PCA via eigenvalue decomposition</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    eigvals, pc <span class="op">=</span> np.linalg.eig(covar)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    pc <span class="op">=</span> pc[:, np.argsort(<span class="op">-</span>eigvals)]</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    eigvals <span class="op">=</span> np.sort(eigvals)[::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>    eigvals <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> eigvals <span class="op">/</span> np.<span class="bu">sum</span>(eigvals)  <span class="co"># Convert to percent change</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    pcvariance[ti] <span class="op">=</span> eigvals[whichcomp <span class="op">-</span> <span class="dv">1</span>]</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>    firstpcas[ti, :] <span class="op">=</span> pc[:, whichcomp <span class="op">-</span> <span class="dv">1</span>]</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust the sign of the principal components for consistent visualization.</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Just do it for the first component since its visualization is only in the positive range.</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> whichcomp <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(firstpcas.shape[<span class="dv">0</span>]):</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> np.<span class="bu">sum</span>(firstpcas[i, :]) <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>            firstpcas[i, :] <span class="op">=</span> <span class="op">-</span>firstpcas[i, :]</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot variance over time</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>plt.plot(centertimes, pcvariance)</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1200</span>])</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="ss">f'% variance from PC</span><span class="sc">{</span>whichcomp<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="co"># create channel montage </span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>chan_labels <span class="op">=</span> [chan[<span class="st">'labels'</span>][<span class="dv">0</span>] <span class="cf">for</span> chan <span class="kw">in</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>]]</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> np.vstack([<span class="op">-</span><span class="dv">1</span><span class="op">*</span>EEG[<span class="st">'chanlocs'</span>][<span class="st">'Y'</span>], EEG[<span class="st">'chanlocs'</span>][<span class="st">'X'</span>], EEG[<span class="st">'chanlocs'</span>][<span class="st">'Z'</span>]]).T</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="co"># remove channels outside of head</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>exclude_chans <span class="op">=</span> np.where(np.array([chan[<span class="st">'radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="cf">for</span> chan <span class="kw">in</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>]]) <span class="op">&gt;</span> <span class="fl">0.54</span>)</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> np.delete(coords, exclude_chans, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>chan_labels <span class="op">=</span> np.delete(chan_labels, exclude_chans)</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>firstpcas <span class="op">=</span> np.delete(firstpcas, exclude_chans, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>montage <span class="op">=</span> make_dig_montage(ch_pos<span class="op">=</span><span class="bu">dict</span>(<span class="bu">zip</span>(chan_labels, coords)), coord_frame<span class="op">=</span><span class="st">'head'</span>)</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="co"># create MNE Info and Evoked object</span></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>info <span class="op">=</span> create_info(<span class="bu">list</span>(chan_labels), EEG[<span class="st">'srate'</span>], ch_types<span class="op">=</span><span class="st">'eeg'</span>)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot topomaps at specified times</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, maptime <span class="kw">in</span> <span class="bu">enumerate</span>(maptimes):</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> plt.subplot(<span class="bu">int</span>(np.ceil(<span class="bu">len</span>(maptimes) <span class="op">/</span> np.ceil(np.sqrt(<span class="bu">len</span>(maptimes))))), <span class="bu">int</span>(np.ceil(np.sqrt(<span class="bu">len</span>(maptimes)))), i <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>    evoked <span class="op">=</span> EvokedArray(firstpcas[mapsidx[i], :, np.newaxis], info, tmin<span class="op">=</span>EEG[<span class="st">'xmin'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>    evoked.set_montage(montage)</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    evoked.plot_topomap(sphere<span class="op">=</span>EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="dv">0</span>][<span class="st">'sph_radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">'jet'</span>, vlim<span class="op">=</span>clim, axes<span class="op">=</span>ax, show<span class="op">=</span><span class="va">False</span>, times<span class="op">=-</span><span class="dv">1</span>, time_format<span class="op">=</span><span class="st">''</span>, colorbar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f'PC</span><span class="sc">{</span>whichcomp<span class="sc">}</span><span class="ss"> from </span><span class="sc">{</span>maptime<span class="sc">}</span><span class="ss"> ms'</span>)</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-8-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 23.7</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter parameters</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>center_freq <span class="op">=</span> <span class="dv">12</span>  <span class="co"># in Hz</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>filter_frequency_spread <span class="op">=</span> <span class="dv">3</span>  <span class="co"># Hz +/- the center frequency</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>transition_width <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct filter kernel</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>nyquist <span class="op">=</span> EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>filter_order <span class="op">=</span> <span class="bu">round</span>(<span class="dv">3</span> <span class="op">*</span> (EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">/</span> (center_freq <span class="op">-</span> filter_frequency_spread)))</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>ffrequencies <span class="op">=</span> [<span class="dv">0</span>, (<span class="dv">1</span> <span class="op">-</span> transition_width) <span class="op">*</span> (center_freq <span class="op">-</span> filter_frequency_spread), (center_freq <span class="op">-</span> filter_frequency_spread), (center_freq <span class="op">+</span> filter_frequency_spread), (<span class="dv">1</span> <span class="op">+</span> transition_width) <span class="op">*</span> (center_freq <span class="op">+</span> filter_frequency_spread), nyquist] <span class="op">/</span> nyquist</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>idealresponse <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>filterweights <span class="op">=</span> firls(filter_order, ffrequencies, idealresponse)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the data</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>filter_result <span class="op">=</span> filtfilt(filterweights, <span class="dv">1</span>, np.reshape(EEG[<span class="st">'data'</span>], (EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">*</span> EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>))</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>filter_result <span class="op">=</span> np.reshape(filter_result, (EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform PCA on filtered data</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>covar <span class="op">=</span> np.zeros((EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    eeg <span class="op">=</span> filter_result[:, :, i] <span class="op">-</span> np.mean(filter_result[:, :, i], axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    covar <span class="op">+=</span> np.dot(eeg, eeg.T) <span class="op">/</span> (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>covar <span class="op">/=</span> EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>eigvals, pc <span class="op">=</span> np.linalg.eig(covar)</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>pc <span class="op">=</span> pc[:, np.argsort(<span class="op">-</span>eigvals)]</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>eigvals <span class="op">=</span> np.sort(eigvals)[::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>eigvals <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> eigvals <span class="op">/</span> np.<span class="bu">sum</span>(eigvals)  <span class="co"># Convert to percent change</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="co"># create channel montage </span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>chan_labels <span class="op">=</span> [chan[<span class="st">'labels'</span>][<span class="dv">0</span>] <span class="cf">for</span> chan <span class="kw">in</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>]]</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> np.vstack([<span class="op">-</span><span class="dv">1</span><span class="op">*</span>EEG[<span class="st">'chanlocs'</span>][<span class="st">'Y'</span>], EEG[<span class="st">'chanlocs'</span>][<span class="st">'X'</span>], EEG[<span class="st">'chanlocs'</span>][<span class="st">'Z'</span>]]).T</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="co"># remove channels outside of head</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>exclude_chans <span class="op">=</span> np.where(np.array([chan[<span class="st">'radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="cf">for</span> chan <span class="kw">in</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>]]) <span class="op">&gt;</span> <span class="fl">0.54</span>)</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> np.delete(coords, exclude_chans, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>chan_labels <span class="op">=</span> np.delete(chan_labels, exclude_chans)</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>pc_lp <span class="op">=</span> np.delete(pc, exclude_chans, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>montage <span class="op">=</span> make_dig_montage(ch_pos<span class="op">=</span><span class="bu">dict</span>(<span class="bu">zip</span>(chan_labels, coords)), coord_frame<span class="op">=</span><span class="st">'head'</span>)</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="co"># create MNE Info and Evoked object</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>info <span class="op">=</span> create_info(<span class="bu">list</span>(chan_labels), EEG[<span class="st">'srate'</span>], ch_types<span class="op">=</span><span class="st">'eeg'</span>)</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the first 9 principal components</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">9</span>):</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>    plt.figure(<span class="dv">10</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> plt.subplot(<span class="dv">3</span>, <span class="dv">3</span>, i <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>    evoked <span class="op">=</span> EvokedArray(pc_lp[:, i, np.newaxis], info, tmin<span class="op">=</span>EEG[<span class="st">'xmin'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>    evoked.set_montage(montage)</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>    evoked.plot_topomap(sphere<span class="op">=</span>EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="dv">0</span>][<span class="st">'sph_radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">'jet'</span>, axes<span class="op">=</span>ax, show<span class="op">=</span><span class="va">False</span>, times<span class="op">=-</span><span class="dv">1</span>, time_format<span class="op">=</span><span class="st">''</span>, colorbar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f'PC #</span><span class="sc">{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">, eigval=</span><span class="sc">{</span>eigvals[i]<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>    plt.figure(<span class="dv">11</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">9</span>, <span class="dv">1</span>, i <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>    plt.plot(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], pc[:, i].T <span class="op">@</span> np.mean(filter_result, axis<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>    plt.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>    plt.xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1200</span>])</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f'PC #</span><span class="sc">{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">, eigval=</span><span class="sc">{</span>eigvals[i]<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-9-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Figure 23.8</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Note about this code: The legend of this figure (page 304) states that the PCA computed on all trials and then the weights were</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># separately applied to the first and last 30 trials. However, in the code below (and thus, in the book figure), the PCA is </span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># actually computed separately on the first and last 30 trials.</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># PCA on first 30 trials</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>covar <span class="op">=</span> np.zeros((EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">30</span>):</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    eeg <span class="op">=</span> filter_result[:, :, i] <span class="op">-</span> np.mean(filter_result[:, :, i], axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    covar <span class="op">+=</span> np.dot(eeg, eeg.T) <span class="op">/</span> (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>covar <span class="op">/=</span> <span class="dv">30</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>eigvals, pc_first <span class="op">=</span> np.linalg.eig(covar)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>pc_first <span class="op">=</span> pc_first[:, np.argsort(<span class="op">-</span>eigvals)]</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># PCA on last 30 trials</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>covar <span class="op">=</span> np.zeros((EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">30</span>, EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    eeg <span class="op">=</span> filter_result[:, :, i] <span class="op">-</span> np.mean(filter_result[:, :, i], axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    covar <span class="op">+=</span> np.dot(eeg, eeg.T) <span class="op">/</span> (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>covar <span class="op">/=</span> <span class="dv">30</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>eigvals, pc_last <span class="op">=</span> np.linalg.eig(covar)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>pc_last <span class="op">=</span> pc_last[:, np.argsort(<span class="op">-</span>eigvals)]</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the first 9 principal components for first and last 30 trials</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">9</span>):</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">3</span>, <span class="dv">3</span>, i <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    plt.plot(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], pc_first[:, i].T <span class="op">@</span> np.mean(filter_result[:, :, :<span class="dv">30</span>], axis<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    plt.plot(EEG[<span class="st">'times'</span>][<span class="dv">0</span>], pc_last[:, i].T <span class="op">@</span> np.mean(filter_result[:, :, <span class="op">-</span><span class="dv">30</span>:], axis<span class="op">=</span><span class="dv">2</span>), <span class="st">'r'</span>)</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>    plt.xlim([<span class="op">-</span><span class="dv">200</span>, <span class="dv">1200</span>])</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f'PC #</span><span class="sc">{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>plt.legend([<span class="st">'first 30 trials'</span>, <span class="st">'last 30 trials'</span>])</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="chapter23_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
