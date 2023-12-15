@@ -3,15 +3,29 @@ from numpy.linalg import pinv
 
 def laplacian_nola(x, y, z, data, smoothing=100):
     """
-    Compute surface Laplacian of EEG data via New Orleans method.
-    
+    Compute surface Laplacian of EEG data via the New Orleans method.
+
     Parameters:
-    x, y, z : x, y, z coordinates of electrode positions
-    data : EEG data (can be N-D, but first dimension must be electrodes)
-    smoothing : smoothing parameter (default: 100)
-    
+    x (ndarray): 1D array of x coordinates of electrode positions.
+    y (ndarray): 1D array of y coordinates of electrode positions.
+    z (ndarray): 1D array of z coordinates of electrode positions.
+    data (ndarray): EEG data array where the first dimension corresponds to electrodes.
+                    The data can be N-Dimensional.
+    smoothing (float, optional): Smoothing parameter for the spline. Default is 100.
+
     Returns:
-    surf_lap : the surface Laplacian (second spatial derivative)
+    surf_lap (ndarray): The surface Laplacian of the input EEG data.
+
+    Notes:
+    - The input coordinates (x, y, z) should not contain zero values; small non-zero
+      values are used to replace any zeros to avoid division by zero errors.
+    - The EEG data should be organized with electrodes along the first dimension.
+    - The smoothing parameter controls the flexibility of the spline interpolation.
+      Larger values lead to smoother interpolations.
+    - The function automatically handles multiple trials and time points in the EEG data.
+
+    Original MATLAB function by Mike X Cohen
+    Python translation by AE Studio (and ChatGPT)
     """
     n = len(x)
     

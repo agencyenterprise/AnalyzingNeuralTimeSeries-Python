@@ -2,6 +2,31 @@ import numpy as np
 from scipy.stats import iqr
 
 def mutualinformationx(x, y, fd_bins=None, permtest=False):
+    """
+    Compute mutual information between two vectors.
+
+    Parameters:
+    x (ndarray): 1D array representing the first variable's time series.
+    y (ndarray): 1D array representing the second variable's time series.
+    fd_bins (int, optional): Number of bins to use for distribution discretization.
+                             If None, the Freedman-Diaconis rule is used to determine the number of bins.
+    permtest (bool, optional): If True, perform a permutation test and return mutual information
+                               in standard Z values. Default is False.
+
+    Returns:
+    mi (float): Mutual information in bits.
+    entropy (ndarray): Entropy of x, y, and joint.
+    fd_bins (int): Number of bins used for discretization.
+
+    Notes:
+    - The input vectors x and y must have equal length.
+    - The function can handle matrices by flattening them into vectors.
+    - If permtest is True, the function performs a permutation test to assess the significance
+      of the mutual information value, returning it as a Z-score.
+
+    Original MATLAB function by Mike X Cohen
+    Python translation by AE Studio (and ChatGPT)
+    """
     if len(x) != len(y):
         raise ValueError('X and Y must have equal length')
     
