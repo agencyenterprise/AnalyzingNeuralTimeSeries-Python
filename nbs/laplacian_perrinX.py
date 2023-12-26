@@ -4,6 +4,33 @@ from numpy.linalg import inv
 
 # Define the laplacian_perrinX function in Python
 def laplacian_perrinX(data, x, y, z, leg_order=None, smoothing=1e-5):
+    """
+    Compute surface Laplacian of EEG data using the Perrin et al. (1989) method.
+
+    Parameters:
+    data (ndarray): EEG data array where the first dimension corresponds to electrodes.
+                    The data can be N-Dimensional.
+    x (ndarray): 1D array of x coordinates of electrode positions.
+    y (ndarray): 1D array of y coordinates of electrode positions.
+    z (ndarray): 1D array of z coordinates of electrode positions.
+    leg_order (int, optional): Order of Legendre polynomial. Default is 20 for <=100 electrodes
+                               and 40 for >100 electrodes.
+    smoothing (float, optional): Smoothing parameter (lambda) for G matrix. Default is 1e-5.
+
+    Returns:
+    surf_lap (ndarray): The surface Laplacian of the input EEG data.
+    G (ndarray): G matrix used in the computation.
+    H (ndarray): H matrix used in the computation.
+
+    Notes:
+    - The input coordinates (x, y, z) should be scaled to the unit sphere.
+    - The EEG data should be organized with electrodes along the first dimension.
+    - The smoothing parameter controls the flexibility of the spline interpolation.
+    - The function automatically handles multiple trials and time points in the EEG data.
+
+    Original MATLAB function by Mike X Cohen
+    Python translation by AE Studio (and ChatGPT)
+    """
     numelectrodes = len(x)
     
     # Set default parameters for +/- 100 electrodes
