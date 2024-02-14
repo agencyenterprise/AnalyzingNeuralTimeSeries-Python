@@ -7,11 +7,11 @@ The book has been inspirational to many of us at AE Studio and our friends, so w
 ### [See rendered notebooks here](https://agencyenterprise.github.io/AnalyzingNeuralTimeSeries-Python/)
 
 ### Acknowledgements
-We thank Robert Roses for his initial work and for providing the impetus for this project and Sumner Norman for emphasizing the importance of this work.
+We thank Andrew Roberts for his initial work and for providing the impetus for this project and Sumner Norman for emphasizing the importance of this work.
 And of course, Mike X Cohen for all his amazing work in the field.
 
 ### Other implementations
 
-    Robert Roses - https://github.com/ajroberts0417/ANTS-python
+    Andrew Roberts - https://github.com/ajroberts0417/ANTS-python
     Lyndon Duong - https://github.com/lyndond/Analyzing_Neural_Time_Series
     Original Matlab code - https://github.com/mikexcohen/AnalyzingNeuralTimeSeries/tree/main
