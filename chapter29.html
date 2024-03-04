@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>AnalyzingNeuralTimeSeries-Python - Chapter 29</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="AnalyzingNeuralTimeSeries-Python - Chapter 29">
+<meta property="og:description" content="Python Implementation of Code for ANTS book (Cohen, 2012, MIT Press)">
+<meta property="og:site_name" content="AnalyzingNeuralTimeSeries-Python">
+<meta name="twitter:title" content="AnalyzingNeuralTimeSeries-Python - Chapter 29">
+<meta name="twitter:description" content="Python Implementation of Code for ANTS book (Cohen, 2012, MIT Press)">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">AnalyzingNeuralTimeSeries-Python</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter29.html">Chapter 29</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data: Theory and Practice - Python Implementation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 2</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4a</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4b</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4c</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 5</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 6</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 9</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 10</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 11</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 12</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 13</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 14</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 15</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 16</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 17</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 18</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 19</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 20</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter22.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 22</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter23.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 23</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter25.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 25</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter26.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 26</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter27.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 27</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter28.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 28</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter29.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Chapter 29</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter30.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 30</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter31.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 31</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter33.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 33</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter34.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 34</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#analyzing-neural-time-series-data" id="toc-analyzing-neural-time-series-data" class="nav-link active" data-scroll-target="#analyzing-neural-time-series-data">Analyzing Neural Time Series Data</a></li>
+  <li><a href="#import-necessary-libraries" id="toc-import-necessary-libraries" class="nav-link" data-scroll-target="#import-necessary-libraries">Import necessary libraries</a></li>
+  <li><a href="#figure-29.2" id="toc-figure-29.2" class="nav-link" data-scroll-target="#figure-29.2">Figure 29.2</a></li>
+  <li><a href="#figure-29.3" id="toc-figure-29.3" class="nav-link" data-scroll-target="#figure-29.3">Figure 29.3</a></li>
+  <li><a href="#figure-29.4" id="toc-figure-29.4" class="nav-link" data-scroll-target="#figure-29.4">Figure 29.4</a></li>
+  <li><a href="#figure-29.5" id="toc-figure-29.5" class="nav-link" data-scroll-target="#figure-29.5">Figure 29.5</a></li>
+  <li><a href="#figure-29.6" id="toc-figure-29.6" class="nav-link" data-scroll-target="#figure-29.6">Figure 29.6</a></li>
+  <li><a href="#figure-29.7" id="toc-figure-29.7" class="nav-link" data-scroll-target="#figure-29.7">Figure 29.7</a></li>
+  <li><a href="#figure-29.8" id="toc-figure-29.8" class="nav-link" data-scroll-target="#figure-29.8">Figure 29.8</a></li>
+  <li><a href="#figure-29.9" id="toc-figure-29.9" class="nav-link" data-scroll-target="#figure-29.9">Figure 29.9</a></li>
+  <li><a href="#figure-29.9d" id="toc-figure-29.9d" class="nav-link" data-scroll-target="#figure-29.9d">Figure 29.9d</a></li>
+  <li><a href="#figure-29.10" id="toc-figure-29.10" class="nav-link" data-scroll-target="#figure-29.10">Figure 29.10</a></li>
+  <li><a href="#figure-29.11" id="toc-figure-29.11" class="nav-link" data-scroll-target="#figure-29.11">Figure 29.11</a></li>
+  <li><a href="#figure-29.12" id="toc-figure-29.12" class="nav-link" data-scroll-target="#figure-29.12">Figure 29.12</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/agencyenterprise/AnalyzingNeuralTimeSeries-Python/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Chapter 29</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="chapter-29" class="level4">
+<h4 class="anchored" data-anchor-id="chapter-29">Chapter 29</h4>
+</section>
+<section id="analyzing-neural-time-series-data" class="level3">
+<h3 class="anchored" data-anchor-id="analyzing-neural-time-series-data">Analyzing Neural Time Series Data</h3>
+<p>Python code for Chapter 29 – converted from original Matlab by AE Studio (and ChatGPT)<br>
+Original Matlab code by Mike X Cohen</p>
+<p>This code accompanies the book, titled “Analyzing Neural Time Series Data” (MIT Press).<br>
+Using the code without following the book may lead to confusion, incorrect data analyses, and misinterpretations of results.<br>
+Mike X Cohen and AE Studio assume no responsibility for inappropriate or incorrect use of this code.</p>
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+</section>
+<section id="import-necessary-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="import-necessary-libraries">Import necessary libraries</h3>
+<div id="cell-3" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> iqr, rankdata</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.io <span class="im">import</span> loadmat</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.fftpack <span class="im">import</span> fft, ifft</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mne <span class="im">import</span> create_info, EvokedArray</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mne.channels <span class="im">import</span> make_dig_montage</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mutualinformationx <span class="im">import</span> mutualinformationx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="figure-29.2" class="level3">
+<h3 class="anchored" data-anchor-id="figure-29.2">Figure 29.2</h3>
+<div id="cell-5" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create two signals</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="fl">1.0001</span>, <span class="fl">0.0001</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>signal1 <span class="op">=</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">10</span> <span class="op">*</span> time)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>signal2 <span class="op">=</span> np.random.rand(<span class="bu">len</span>(signal1)) <span class="op">*</span> <span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span>  <span class="co"># uniform random numbers in the same scale as the sine wave</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># plot signals</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">221</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>plt.plot(time, signal1)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>plt.xlim([time[<span class="dv">0</span>], time[<span class="op">-</span><span class="dv">1</span>]])</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">222</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>plt.plot(time, signal2, <span class="st">'r'</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>plt.xlim([time[<span class="dv">0</span>], time[<span class="op">-</span><span class="dv">1</span>]])</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># bin data</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>nbins <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>hdat1, x1 <span class="op">=</span> np.histogram(signal1, bins<span class="op">=</span>nbins)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>hdat2, x2 <span class="op">=</span> np.histogram(signal2, bins<span class="op">=</span>nbins)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># convert to probability</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>hdat1 <span class="op">=</span> hdat1 <span class="op">/</span> np.<span class="bu">sum</span>(hdat1)</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>hdat2 <span class="op">=</span> hdat2 <span class="op">/</span> np.<span class="bu">sum</span>(hdat2)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co"># plot histograms</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">223</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>plt.plot(x1[:<span class="op">-</span><span class="dv">1</span>], hdat1, label<span class="op">=</span><span class="st">'Sine wave'</span>)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>plt.plot(x2[:<span class="op">-</span><span class="dv">1</span>], hdat2, <span class="st">'r'</span>, label<span class="op">=</span><span class="st">'Random data'</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Value bins'</span>)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Probability'</span>)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">224</span>)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>plt.plot(np.sort(signal1))</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>plt.plot(np.sort(signal2), <span class="st">'r'</span>)</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="bu">len</span>(signal1)])</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co"># compute entropy</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>entro <span class="op">=</span> np.zeros(<span class="dv">2</span>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>entro[<span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(hdat1 <span class="op">*</span> np.log2(hdat1 <span class="op">+</span> np.finfo(<span class="bu">float</span>).eps))</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>entro[<span class="dv">1</span>] <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(hdat2 <span class="op">*</span> np.log2(hdat2 <span class="op">+</span> np.finfo(<span class="bu">float</span>).eps))</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Entropies of sine wave and random noise are </span><span class="sc">{</span>entro[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>entro[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">.'</span>)</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Entropies of sine wave and random noise are 5.371662108209934 and 5.641046372916797.</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-29.3" class="level3">
+<h3 class="anchored" data-anchor-id="figure-29.3">Figure 29.3</h3>
+<div id="cell-7" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># range of bin numbers</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>nbins <span class="op">=</span> np.arange(<span class="dv">10</span>, <span class="dv">2001</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>entropyByBinSize <span class="op">=</span> np.zeros(<span class="bu">len</span>(nbins))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nbini <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(nbins)):</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># bin data, transform to probability, and eliminate zeros</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    hdat, _ <span class="op">=</span> np.histogram(signal1, bins<span class="op">=</span>nbins[nbini])</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    hdat <span class="op">=</span> hdat <span class="op">/</span> np.<span class="bu">sum</span>(hdat)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># compute entropy</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    entropyByBinSize[nbini] <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(hdat <span class="op">*</span> np.log2(hdat <span class="op">+</span> np.finfo(<span class="bu">float</span>).eps))</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>plt.plot(nbins, entropyByBinSize)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>plt.xlim([nbins[<span class="dv">0</span>], nbins[<span class="op">-</span><span class="dv">1</span>]])</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of bins'</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Entropy'</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-29.4" class="level3">
+<h3 class="anchored" data-anchor-id="figure-29.4">Figure 29.4</h3>
+<div id="cell-9" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># optimal number of bins for histogram based on a few different guidelines</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(signal1)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>maxmin_range <span class="op">=</span> np.<span class="bu">max</span>(signal1) <span class="op">-</span> np.<span class="bu">min</span>(signal1)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Freedman-Diaconis, Scott, and Sturges rules for bin width</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>fd_bins <span class="op">=</span> np.ceil(maxmin_range <span class="op">/</span> (<span class="fl">2.0</span> <span class="op">*</span> iqr(signal1) <span class="op">*</span> n <span class="op">**</span> (<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>scott_bins <span class="op">=</span> np.ceil(maxmin_range <span class="op">/</span> (<span class="fl">3.5</span> <span class="op">*</span> np.std(signal1) <span class="op">*</span> n <span class="op">**</span> (<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>sturges_bins <span class="op">=</span> np.ceil(<span class="dv">1</span> <span class="op">+</span> np.log2(n))</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">211</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># plot up to 50 bins</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>maxNbins <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(nbins <span class="op">-</span> <span class="dv">50</span>))  <span class="co"># index of nbins that most closely matches 50</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>plt.plot(nbins[:maxNbins], entropyByBinSize[:maxNbins], label<span class="op">=</span><span class="st">'Entropy'</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>plt.axvline(fd_bins, color<span class="op">=</span><span class="st">'m'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Freedman-Diaconis'</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>plt.axvline(scott_bins, color<span class="op">=</span><span class="st">'k'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Scott'</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>plt.axvline(sturges_bins, color<span class="op">=</span><span class="st">'r'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Sturges'</span>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>plt.xlim([nbins[<span class="dv">0</span>], nbins[maxNbins]])</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of bins'</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Entropy'</span>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">223</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>y, x <span class="op">=</span> np.histogram(signal1, bins<span class="op">=</span><span class="bu">int</span>(fd_bins))</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>plt.bar(x[:<span class="op">-</span><span class="dv">1</span>], y, width<span class="op">=</span>np.diff(x), align<span class="op">=</span><span class="st">'edge'</span>, edgecolor<span class="op">=</span><span class="st">'none'</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>plt.xlim([np.<span class="bu">min</span>(signal1) <span class="op">*</span> <span class="fl">1.1</span>, np.<span class="bu">max</span>(signal1) <span class="op">*</span> <span class="fl">1.1</span>])</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Value'</span>)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Count'</span>)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Optimal number of bins (FD rule)'</span>)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">224</span>)</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>y, x <span class="op">=</span> np.histogram(signal1, bins<span class="op">=</span><span class="dv">2000</span>)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>plt.bar(x[:<span class="op">-</span><span class="dv">1</span>], y, width<span class="op">=</span>np.diff(x), align<span class="op">=</span><span class="st">'edge'</span>, edgecolor<span class="op">=</span><span class="st">'none'</span>)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>plt.xlim([np.<span class="bu">min</span>(signal1) <span class="op">*</span> <span class="fl">1.05</span>, np.<span class="bu">max</span>(signal1) <span class="op">*</span> <span class="fl">1.05</span>])</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Value'</span>)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Count'</span>)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Too many bins (2000)'</span>)</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-29.5" class="level3">
+<h3 class="anchored" data-anchor-id="figure-29.5">Figure 29.5</h3>
+<div id="cell-11" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load sample EEG data</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>EEG <span class="op">=</span> loadmat(<span class="st">'../data/sampleEEGdata.mat'</span>)[<span class="st">'EEG'</span>][<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define time windows for entropy calculation</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>time4entropy <span class="op">=</span> [<span class="dv">100</span>, <span class="dv">400</span>]  <span class="co"># in ms</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>base4entropy <span class="op">=</span> [<span class="op">-</span><span class="dv">400</span>, <span class="op">-</span><span class="dv">100</span>]  <span class="co"># in ms</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>topo_entropy <span class="op">=</span> np.zeros(EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert time windows to indices</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>timeidx <span class="op">=</span> [np.argmin(np.<span class="bu">abs</span>(EEG[<span class="st">'times'</span>][<span class="dv">0</span>] <span class="op">-</span> t)) <span class="cf">for</span> t <span class="kw">in</span> time4entropy]</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>baseidx <span class="op">=</span> [np.argmin(np.<span class="bu">abs</span>(EEG[<span class="st">'times'</span>][<span class="dv">0</span>] <span class="op">-</span> t)) <span class="cf">for</span> t <span class="kw">in</span> base4entropy]</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate entropy for each channel</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> chani <span class="kw">in</span> <span class="bu">range</span>(EEG[<span class="st">'nbchan'</span>][<span class="dv">0</span>][<span class="dv">0</span>]):</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Entropy during task</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    tempdat <span class="op">=</span> EEG[<span class="st">'data'</span>][chani, timeidx[<span class="dv">0</span>]:timeidx[<span class="dv">1</span>]<span class="op">+</span><span class="dv">1</span>, :].flatten(<span class="st">'F'</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    hdat, _ <span class="op">=</span> np.histogram(tempdat, bins<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    hdat <span class="op">=</span> hdat <span class="op">/</span> np.<span class="bu">sum</span>(hdat)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    task_entropy <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(hdat <span class="op">*</span> np.log2(hdat <span class="op">+</span> np.finfo(<span class="bu">float</span>).eps))</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Entropy during pre-stim baseline</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    tempdat <span class="op">=</span> EEG[<span class="st">'data'</span>][chani, baseidx[<span class="dv">0</span>]:baseidx[<span class="dv">1</span>]<span class="op">+</span><span class="dv">1</span>, :].flatten(<span class="st">'F'</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    hdat, _ <span class="op">=</span> np.histogram(tempdat, bins<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    hdat <span class="op">=</span> hdat <span class="op">/</span> np.<span class="bu">sum</span>(hdat)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    base_entropy <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(hdat <span class="op">*</span> np.log2(hdat <span class="op">+</span> np.finfo(<span class="bu">float</span>).eps))</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute difference in entropy</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    topo_entropy[chani] <span class="op">=</span> task_entropy <span class="op">-</span> base_entropy</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co"># create channel montage </span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>chan_labels <span class="op">=</span> [chan[<span class="st">'labels'</span>][<span class="dv">0</span>] <span class="cf">for</span> chan <span class="kw">in</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>]]</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> np.vstack([<span class="op">-</span><span class="dv">1</span><span class="op">*</span>EEG[<span class="st">'chanlocs'</span>][<span class="st">'Y'</span>], EEG[<span class="st">'chanlocs'</span>][<span class="st">'X'</span>], EEG[<span class="st">'chanlocs'</span>][<span class="st">'Z'</span>]]).T</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co"># remove channels outside of head</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>exclude_chans <span class="op">=</span> np.where(np.array([chan[<span class="st">'radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="cf">for</span> chan <span class="kw">in</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>]]) <span class="op">&gt;</span> <span class="fl">0.54</span>)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> np.delete(coords, exclude_chans, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>chan_labels <span class="op">=</span> np.delete(chan_labels, exclude_chans)</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>topo_entropy <span class="op">=</span> np.delete(topo_entropy, exclude_chans)</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>montage <span class="op">=</span> make_dig_montage(ch_pos<span class="op">=</span><span class="bu">dict</span>(<span class="bu">zip</span>(chan_labels, coords)), coord_frame<span class="op">=</span><span class="st">'head'</span>)</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="co"># create MNE Info and Evoked object</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>info <span class="op">=</span> create_info(<span class="bu">list</span>(chan_labels), EEG[<span class="st">'srate'</span>], ch_types<span class="op">=</span><span class="st">'eeg'</span>)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the topographic map of entropy differences</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> plt.subplot(<span class="dv">111</span>)</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>evoked <span class="op">=</span> EvokedArray(topo_entropy[:, np.newaxis], info, tmin<span class="op">=</span>EEG[<span class="st">'xmin'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>evoked.set_montage(montage)</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>evoked.plot_topomap(sensors<span class="op">=</span><span class="va">False</span>, contours<span class="op">=</span><span class="dv">0</span>, sphere<span class="op">=</span>EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="dv">0</span>][<span class="st">'sph_radius'</span>][<span class="dv">0</span>][<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">'jet'</span>, axes<span class="op">=</span>ax1, show<span class="op">=</span><span class="va">False</span>, times<span class="op">=-</span><span class="dv">1</span>, time_format<span class="op">=</span><span class="st">''</span>, colorbar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Define sensor for entropy over time and parameters</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>sensor4entropy <span class="op">=</span> <span class="st">'FCz'</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>times2save <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">300</span>, <span class="dv">1250</span>, <span class="dv">50</span>)  <span class="co"># in ms</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>timewindow <span class="op">=</span> <span class="dv">400</span>  <span class="co"># ms</span></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert ms to indices</span></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>timewindowidx <span class="op">=</span> <span class="bu">round</span>(timewindow <span class="op">/</span> (<span class="dv">1000</span> <span class="op">/</span> EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>]) <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>times2saveidx <span class="op">=</span> [np.argmin(np.<span class="bu">abs</span>(EEG[<span class="st">'times'</span>][<span class="dv">0</span>] <span class="op">-</span> t)) <span class="cf">for</span> t <span class="kw">in</span> times2save]</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the index of the selected sensor</span></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>electrodeidx <span class="op">=</span> EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="st">'labels'</span>]<span class="op">==</span>sensor4entropy</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize array to store entropy values</span></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>timeEntropy <span class="op">=</span> np.zeros((<span class="dv">2</span>, <span class="bu">len</span>(times2save)))</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate entropy over time for the selected sensor</span></span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> timei, tidx <span class="kw">in</span> <span class="bu">enumerate</span>(times2saveidx):</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Data for first 30 trials</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>    tempdata <span class="op">=</span> EEG[<span class="st">'data'</span>][electrodeidx, tidx <span class="op">-</span> timewindowidx:tidx <span class="op">+</span> timewindowidx <span class="op">+</span> <span class="dv">1</span>, :<span class="dv">30</span>].flatten(<span class="st">'F'</span>)</span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>    hdat, _ <span class="op">=</span> np.histogram(tempdata, bins<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>    hdat <span class="op">=</span> hdat <span class="op">/</span> np.<span class="bu">sum</span>(hdat)</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>    timeEntropy[<span class="dv">0</span>, timei] <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(hdat <span class="op">*</span> np.log2(hdat <span class="op">+</span> np.finfo(<span class="bu">float</span>).eps))</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Data for last 30 trials</span></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>    tempdata <span class="op">=</span> EEG[<span class="st">'data'</span>][electrodeidx, tidx <span class="op">-</span> timewindowidx:tidx <span class="op">+</span> timewindowidx <span class="op">+</span> <span class="dv">1</span>, <span class="op">-</span><span class="dv">30</span>:].flatten(<span class="st">'F'</span>)</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>    hdat, _ <span class="op">=</span> np.histogram(tempdata, bins<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>    hdat <span class="op">=</span> hdat <span class="op">/</span> np.<span class="bu">sum</span>(hdat)</span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>    timeEntropy[<span class="dv">1</span>, timei] <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(hdat <span class="op">*</span> np.log2(hdat <span class="op">+</span> np.finfo(<span class="bu">float</span>).eps))</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the entropy over time</span></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>plt.plot(times2save, timeEntropy[<span class="dv">0</span>, :], label<span class="op">=</span><span class="st">'First 30 trials'</span>)</span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>plt.plot(times2save, timeEntropy[<span class="dv">1</span>, :], label<span class="op">=</span><span class="st">'Last 30 trials'</span>)</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Entropy (bits)'</span>)</span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'Entropy over time from electrode </span><span class="sc">{</span>sensor4entropy<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-6-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-29.6" class="level3">
+<h3 class="anchored" data-anchor-id="figure-29.6">Figure 29.6</h3>
+<div id="cell-13" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># right panel: random noise</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>signal1 <span class="op">=</span> np.random.rand(<span class="bu">len</span>(signal1)) <span class="op">*</span> <span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>signal2 <span class="op">=</span> np.random.rand(<span class="bu">len</span>(signal1)) <span class="op">*</span> <span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># center panel: one pure sine wave and one sine wave plus random noise</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment the following lines to use these signals instead</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>signal1 <span class="op">=</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">10</span> <span class="op">*</span> time)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>signal2 <span class="op">=</span> signal1 <span class="op">+</span> np.random.randn(<span class="bu">len</span>(signal1)) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># left panel: one pure sine wave and its inverse</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment the following lines to use these signals instead</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>signal1 <span class="op">=</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">10</span> <span class="op">*</span> time)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>signal2 <span class="op">=</span> <span class="op">-</span>signal1</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># determine the optimal number of bins for each variable</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(signal1)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>maxmin_range <span class="op">=</span> np.<span class="bu">max</span>(signal1) <span class="op">-</span> np.<span class="bu">min</span>(signal1)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>fd_bins1 <span class="op">=</span> np.ceil(maxmin_range <span class="op">/</span> (<span class="fl">2.0</span> <span class="op">*</span> iqr(signal1) <span class="op">*</span> n <span class="op">**</span> (<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)))  <span class="co"># Freedman-Diaconis</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(signal2)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>maxmin_range <span class="op">=</span> np.<span class="bu">max</span>(signal2) <span class="op">-</span> np.<span class="bu">min</span>(signal2)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>fd_bins2 <span class="op">=</span> np.ceil(maxmin_range <span class="op">/</span> (<span class="fl">2.0</span> <span class="op">*</span> iqr(signal2) <span class="op">*</span> n <span class="op">**</span> (<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)))  <span class="co"># Freedman-Diaconis</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co"># and use the average...</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>fd_bins <span class="op">=</span> <span class="bu">int</span>(np.ceil((fd_bins1 <span class="op">+</span> fd_bins2) <span class="op">/</span> <span class="dv">2</span>))</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co"># bin data (using np.histogram)</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>edges1 <span class="op">=</span> np.linspace(<span class="bu">min</span>(signal1), <span class="bu">max</span>(signal1), fd_bins <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>edges2 <span class="op">=</span> np.linspace(<span class="bu">min</span>(signal2), <span class="bu">max</span>(signal2), fd_bins <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>nPerBin1, _ <span class="op">=</span> np.histogram(signal1, edges1)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>nPerBin2, _ <span class="op">=</span> np.histogram(signal2, edges2)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the bin indices for each value in signal1 and signal2</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>bin_indices1 <span class="op">=</span> np.digitize(signal1, edges1) <span class="op">-</span> <span class="dv">1</span>  <span class="co"># -1 to convert to 0-based indexing</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>bin_indices2 <span class="op">=</span> np.digitize(signal2, edges2) <span class="op">-</span> <span class="dv">1</span>  <span class="co"># -1 to convert to 0-based indexing</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="co"># compute joint frequency table</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>jointprobs <span class="op">=</span> np.zeros((fd_bins, fd_bins))</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i1 <span class="kw">in</span> <span class="bu">range</span>(fd_bins):</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i2 <span class="kw">in</span> <span class="bu">range</span>(fd_bins):</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>        jointprobs[i1, i2] <span class="op">=</span> np.<span class="bu">sum</span>((bin_indices1 <span class="op">==</span> i1) <span class="op">&amp;</span> (bin_indices2 <span class="op">==</span> i2))</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>jointprobs <span class="op">/=</span> np.<span class="bu">sum</span>(jointprobs)</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the signals</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">211</span>)</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>plt.plot(time, signal1)</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>plt.xlim([time[<span class="dv">0</span>], time[<span class="op">-</span><span class="dv">1</span>]])</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>plt.plot(time, signal2)</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>plt.xlim([time[<span class="dv">0</span>], time[<span class="op">-</span><span class="dv">1</span>]])</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the joint probability matrix</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>plt.imshow(jointprobs, cmap<span class="op">=</span><span class="st">'gray'</span>, aspect<span class="op">=</span><span class="st">'auto'</span>)</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>plt.colorbar()</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Signal 2 bin'</span>)</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Signal 1 bin'</span>)</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>plt.clim(<span class="dv">0</span>, <span class="fl">0.01</span>)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>plt.gca().invert_yaxis()</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-7-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-29.7" class="level3">
+<h3 class="anchored" data-anchor-id="figure-29.7">Figure 29.7</h3>
+<div id="cell-15" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the signals and their mutual information</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">221</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="fl">1.001</span>, <span class="fl">0.001</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> x</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y, <span class="st">'.'</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'MI=</span><span class="sc">{</span>mutualinformationx(x, y)[<span class="dv">0</span>]<span class="sc">:.4f}</span><span class="ss">, r_s=</span><span class="sc">{</span>np<span class="sc">.</span>corrcoef(x, y)[<span class="dv">0</span>, <span class="dv">1</span>]<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">222</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="fl">1.001</span>, <span class="fl">0.001</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="op">-</span>x<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y, <span class="st">'.'</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>])</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'MI=</span><span class="sc">{</span>mutualinformationx(x, y)[<span class="dv">0</span>]<span class="sc">:.4f}</span><span class="ss">, r_s=</span><span class="sc">{</span>np<span class="sc">.</span>corrcoef(x, y)[<span class="dv">0</span>, <span class="dv">1</span>]<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">223</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.cos(np.arange(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi, <span class="fl">0.01</span>))</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.sin(np.arange(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi, <span class="fl">0.01</span>))</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y, <span class="st">'.'</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'MI=</span><span class="sc">{</span>mutualinformationx(x, y)[<span class="dv">0</span>]<span class="sc">:.4f}</span><span class="ss">, r_s=</span><span class="sc">{</span>np<span class="sc">.</span>corrcoef(x, y)[<span class="dv">0</span>, <span class="dv">1</span>]<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">224</span>)</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.concatenate([np.cos(np.arange(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi, <span class="fl">0.01</span>)), np.cos(np.arange(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi, <span class="fl">0.01</span>)) <span class="op">+</span> <span class="dv">1</span>])</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.concatenate([np.sin(np.arange(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi, <span class="fl">0.01</span>)), np.sin(np.arange(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi, <span class="fl">0.01</span>)) <span class="op">-</span> <span class="dv">1</span>])</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y, <span class="st">'.'</span>)</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>])</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="dv">2</span>, <span class="dv">1</span>])</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'MI=</span><span class="sc">{</span>mutualinformationx(x, y)[<span class="dv">0</span>]<span class="sc">:.4f}</span><span class="ss">, r_s=</span><span class="sc">{</span>np<span class="sc">.</span>corrcoef(x, y)[<span class="dv">0</span>, <span class="dv">1</span>]<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-29.8" class="level3">
+<h3 class="anchored" data-anchor-id="figure-29.8">Figure 29.8</h3>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define error estimation functions</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> entropy_error(b, n):</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (b <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> (<span class="fl">2.0</span> <span class="op">*</span> n <span class="op">*</span> np.log(<span class="dv">2</span>))</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mutinfo_error(b, n):</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (b <span class="op">-</span> <span class="dv">1</span>)<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="fl">2.0</span> <span class="op">*</span> n <span class="op">*</span> np.log(<span class="dv">2</span>))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Define range of data points and fixed number of bins</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> np.arange(<span class="dv">20</span>, <span class="dv">301</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>nfixed <span class="op">=</span> <span class="dv">15</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate errors</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>entropy_errors_fixed <span class="op">=</span> entropy_error(nfixed, n)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>entropy_errors_sturges <span class="op">=</span> entropy_error(np.ceil(<span class="dv">1</span> <span class="op">+</span> np.log2(n)), n)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>mutinfo_errors_fixed <span class="op">=</span> mutinfo_error(nfixed, n)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>mutinfo_errors_sturges <span class="op">=</span> mutinfo_error(np.ceil(<span class="dv">1</span> <span class="op">+</span> np.log2(n)), n)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot entropy error</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">211</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>plt.plot(n, entropy_errors_fixed, label<span class="op">=</span><span class="ss">f'</span><span class="sc">{</span>nfixed<span class="sc">}</span><span class="ss"> bins'</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>plt.plot(n, entropy_errors_sturges, <span class="st">'r'</span>, label<span class="op">=</span><span class="st">"Sturges' rule"</span>)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of data points'</span>)</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Entropy error (bits)'</span>)</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>plt.xlim([n[<span class="dv">0</span>], n[<span class="op">-</span><span class="dv">1</span>]])</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot mutual information error</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>plt.plot(n, mutinfo_errors_fixed, label<span class="op">=</span><span class="ss">f'</span><span class="sc">{</span>nfixed<span class="sc">}</span><span class="ss"> bins'</span>)</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>plt.plot(n, mutinfo_errors_sturges, <span class="st">'r'</span>, label<span class="op">=</span><span class="st">"Sturges' rule"</span>)</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of data points'</span>)</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Mutual information error'</span>)</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>plt.xlim([n[<span class="dv">0</span>], n[<span class="op">-</span><span class="dv">1</span>]])</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-29.9" class="level3">
+<h3 class="anchored" data-anchor-id="figure-29.9">Figure 29.9</h3>
+<div id="cell-19" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the signals</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.concatenate([np.cos(np.arange(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi, <span class="fl">0.01</span>)), np.cos(np.arange(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi, <span class="fl">0.01</span>)) <span class="op">+</span> <span class="dv">1</span>])</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.concatenate([np.sin(np.arange(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi, <span class="fl">0.01</span>)), np.sin(np.arange(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi, <span class="fl">0.01</span>)) <span class="op">-</span> <span class="dv">1</span>])</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define noise levels and initialize mutual information array</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>noiselevels <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="fl">1.01</span>, <span class="fl">0.01</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>mi <span class="op">=</span> np.zeros(<span class="bu">len</span>(noiselevels))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mutual information for different levels of noise</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ni <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(noiselevels)):</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    noisy_y <span class="op">=</span> y <span class="op">+</span> np.random.randn(<span class="bu">len</span>(y)) <span class="op">*</span> noiselevels[ni]</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    mi[ni] <span class="op">=</span> mutualinformationx(x, noisy_y)[<span class="dv">0</span>]</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the original signal without noise</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">221</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y, <span class="st">'.'</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>plt.axis([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>])</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the mutual information as a function of noise level</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>plt.plot(noiselevels, mi)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>plt.xlim([noiselevels[<span class="dv">0</span>], noiselevels[<span class="op">-</span><span class="dv">1</span>]])</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Noise level'</span>)</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Mutual information'</span>)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the signal with an intermediate level of noise</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">222</span>)</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>mid_noise_idx <span class="op">=</span> <span class="bu">round</span>(<span class="bu">len</span>(noiselevels) <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y <span class="op">+</span> np.random.randn(<span class="bu">len</span>(y)) <span class="op">*</span> noiselevels[mid_noise_idx], <span class="st">'.'</span>)</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>plt.axis([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>])</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-29.9d" class="level3">
+<h3 class="anchored" data-anchor-id="figure-29.9d">Figure 29.9d</h3>
+<p>(takes a while to run)</p>
+<div id="cell-21" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the range of data lengths and noise levels</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>nrange <span class="op">=</span> np.arange(<span class="dv">300</span>, <span class="dv">3000</span>, <span class="dv">205</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>noiselevels <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="fl">1.01</span>, <span class="fl">0.01</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the mutual information matrix and bin number array</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>mi <span class="op">=</span> np.zeros((<span class="bu">len</span>(nrange), <span class="bu">len</span>(noiselevels)))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> np.zeros(<span class="bu">len</span>(nrange)).astype(<span class="bu">int</span>)  <span class="co"># number of histogram bins</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over different data lengths</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ni, n <span class="kw">in</span> <span class="bu">enumerate</span>(nrange):</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define time and signals</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi, n)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.concatenate([np.cos(t), np.cos(t) <span class="op">+</span> <span class="dv">1</span>])</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> np.concatenate([np.sin(t), np.sin(t) <span class="op">-</span> <span class="dv">1</span>])</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Loop over different noise levels</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> noi, noise <span class="kw">in</span> <span class="bu">enumerate</span>(noiselevels):</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> noi <span class="op">==</span> <span class="dv">0</span>:  <span class="co"># keep number of bins constant across noise levels within each number of points</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>            mi[ni, noi], _, b[ni] <span class="op">=</span> mutualinformationx(x, y <span class="op">+</span> np.random.randn(<span class="bu">len</span>(y)) <span class="op">*</span> noise)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>            mi[ni, noi] <span class="op">=</span> mutualinformationx(x, y <span class="op">+</span> np.random.randn(<span class="bu">len</span>(y)) <span class="op">*</span> noise, fd_bins<span class="op">=</span>b[ni])[<span class="dv">0</span>]</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to percent change from best-case scenario (no noise, large N)</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>mip <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> (mi <span class="op">-</span> mi[<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>]) <span class="op">/</span> mi[<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>]</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the percent decrease in MI due to noise</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>plt.contourf(noiselevels, nrange, mip, <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, vmin<span class="op">=-</span><span class="dv">100</span>, vmax<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>plt.colorbar()</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Noise level'</span>)</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'N (data length)'</span>)</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Percent decrease in MI due to noise'</span>)</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-29.10" class="level3">
+<h3 class="anchored" data-anchor-id="figure-29.10">Figure 29.10</h3>
+<div id="cell-23" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define electrodes for mutual information analysis and other parameters</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>electrodes4mi <span class="op">=</span> [<span class="st">'Fz'</span>, <span class="st">'O1'</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>timewindow <span class="op">=</span> <span class="dv">400</span>  <span class="co"># in ms</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>times2save <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">400</span>, <span class="dv">1201</span>, <span class="dv">100</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert ms to indices</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>timewindowidx <span class="op">=</span> <span class="bu">round</span>(timewindow <span class="op">/</span> (<span class="dv">1000</span> <span class="op">/</span> EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>]) <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>times2saveidx <span class="op">=</span> [np.argmin(np.<span class="bu">abs</span>(EEG[<span class="st">'times'</span>][<span class="dv">0</span>] <span class="op">-</span> t)) <span class="cf">for</span> t <span class="kw">in</span> times2save]</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the indices of the selected electrodes</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>electrodesidx <span class="op">=</span> [EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="st">'labels'</span>]<span class="op">==</span>electrodes4mi[<span class="dv">0</span>], EEG[<span class="st">'chanlocs'</span>][<span class="dv">0</span>][<span class="st">'labels'</span>]<span class="op">==</span>electrodes4mi[<span class="dv">1</span>]]</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize outputs</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>entropy <span class="op">=</span> np.zeros((<span class="dv">3</span>, <span class="bu">len</span>(times2save)))</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>mi <span class="op">=</span> np.zeros((<span class="dv">2</span>, <span class="bu">len</span>(times2save)))</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>nbins <span class="op">=</span> np.zeros(<span class="bu">len</span>(times2save))</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mutual information over time</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> timei, tidx <span class="kw">in</span> <span class="bu">enumerate</span>(times2saveidx):</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    datax <span class="op">=</span> EEG[<span class="st">'data'</span>][electrodesidx[<span class="dv">0</span>], tidx <span class="op">-</span> timewindowidx:tidx <span class="op">+</span> timewindowidx <span class="op">+</span> <span class="dv">1</span>, :].flatten(<span class="st">'F'</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    datay <span class="op">=</span> EEG[<span class="st">'data'</span>][electrodesidx[<span class="dv">1</span>], tidx <span class="op">-</span> timewindowidx:tidx <span class="op">+</span> timewindowidx <span class="op">+</span> <span class="dv">1</span>, :].flatten(<span class="st">'F'</span>)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Determine the number of bins for each variable using the Freedman-Diaconis rule</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    bins_x <span class="op">=</span> <span class="bu">int</span>(np.ceil((np.<span class="bu">max</span>(datax) <span class="op">-</span> np.<span class="bu">min</span>(datax)) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> iqr(datax) <span class="op">/</span> <span class="bu">len</span>(datax) <span class="op">**</span> (<span class="dv">1</span> <span class="op">/</span> <span class="dv">3</span>))))</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    bins_y <span class="op">=</span> <span class="bu">int</span>(np.ceil((np.<span class="bu">max</span>(datay) <span class="op">-</span> np.<span class="bu">min</span>(datay)) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> iqr(datay) <span class="op">/</span> <span class="bu">len</span>(datay) <span class="op">**</span> (<span class="dv">1</span> <span class="op">/</span> <span class="dv">3</span>))))</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    nbins[timei] <span class="op">=</span> <span class="bu">max</span>(bins_x, bins_y)  <span class="co"># Use the larger number of bins</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate mutual information with variable bin length</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    mi[<span class="dv">0</span>, timei] <span class="op">=</span> mutualinformationx(datax, datay, fd_bins<span class="op">=</span><span class="bu">int</span>(nbins[timei]))[<span class="dv">0</span>]</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate mutual information with fixed bin length (e.g., 70)</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>    mi[<span class="dv">1</span>, timei] <span class="op">=</span> mutualinformationx(datax, datay, fd_bins<span class="op">=</span><span class="dv">70</span>)[<span class="dv">0</span>]</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the mutual information over time</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">221</span>)</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>plt.plot(times2save, mi[<span class="dv">0</span>, :])</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'MI (bits)'</span>)</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Variable bin length'</span>)</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>plt.xlim([times2save[<span class="dv">0</span>] <span class="op">-</span> <span class="dv">50</span>, times2save[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> <span class="dv">50</span>])</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>plt.ylim([np.<span class="bu">min</span>(mi) <span class="op">-</span> <span class="fl">0.01</span>, np.<span class="bu">max</span>(mi) <span class="op">+</span> <span class="fl">0.01</span>])</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">222</span>)</span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>plt.plot(nbins, mi[<span class="dv">0</span>, :], <span class="st">'.'</span>)</span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Bin length'</span>)</span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'MI (bits)'</span>)</span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Bin length vs. MI'</span>)</span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>plt.ylim([np.<span class="bu">min</span>(mi) <span class="op">-</span> <span class="fl">0.01</span>, np.<span class="bu">max</span>(mi) <span class="op">+</span> <span class="fl">0.01</span>])</span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">223</span>)</span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>plt.plot(times2save, mi[<span class="dv">1</span>, :])</span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'MI (bits)'</span>)</span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Constant bin length'</span>)</span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>plt.xlim([times2save[<span class="dv">0</span>] <span class="op">-</span> <span class="dv">50</span>, times2save[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> <span class="dv">50</span>])</span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>plt.ylim([np.<span class="bu">min</span>(mi) <span class="op">-</span> <span class="fl">0.01</span>, np.<span class="bu">max</span>(mi) <span class="op">+</span> <span class="fl">0.01</span>])</span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-29.11" class="level3">
+<h3 class="anchored" data-anchor-id="figure-29.11">Figure 29.11</h3>
+<div id="cell-25" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define frequency range and baseline time window</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>frex <span class="op">=</span> np.logspace(np.log10(<span class="dv">4</span>), np.log10(<span class="dv">40</span>), <span class="dv">20</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>baselinetime <span class="op">=</span> [<span class="op">-</span><span class="dv">500</span>, <span class="op">-</span><span class="dv">200</span>]</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert baseline time window to indices</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>baseidx <span class="op">=</span> [np.argmin(np.<span class="bu">abs</span>(times2save <span class="op">-</span> t)) <span class="cf">for</span> t <span class="kw">in</span> baselinetime]</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify convolution parameters</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>], <span class="dv">1</span><span class="op">/</span>EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>half_wavelet <span class="op">=</span> (<span class="bu">len</span>(time) <span class="op">-</span> <span class="dv">1</span>) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>n_wavelet <span class="op">=</span> <span class="bu">len</span>(time)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>n_data <span class="op">=</span> EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">*</span> EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>n_convolution <span class="op">=</span> n_wavelet <span class="op">+</span> n_data <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># FFT of data for both electrodes</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>fft_EEG1 <span class="op">=</span> fft(EEG[<span class="st">'data'</span>][electrodesidx[<span class="dv">0</span>], :, :].flatten(<span class="st">'F'</span>), n_convolution)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>fft_EEG2 <span class="op">=</span> fft(EEG[<span class="st">'data'</span>][electrodesidx[<span class="dv">1</span>], :, :].flatten(<span class="st">'F'</span>), n_convolution)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize outputs</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>mi <span class="op">=</span> np.zeros((<span class="dv">2</span>, <span class="bu">len</span>(frex), <span class="bu">len</span>(times2save)))</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>ispc <span class="op">=</span> np.zeros((<span class="bu">len</span>(frex), <span class="bu">len</span>(times2save)))</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>powc <span class="op">=</span> np.zeros((<span class="bu">len</span>(frex), <span class="bu">len</span>(times2save)))</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over frequencies</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi, f <span class="kw">in</span> <span class="bu">enumerate</span>(frex):</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create wavelet and get its FFT</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    wavelet <span class="op">=</span> np.exp(<span class="dv">2</span> <span class="op">*</span> <span class="ot">1j</span> <span class="op">*</span> np.pi <span class="op">*</span> f <span class="op">*</span> time) <span class="op">*</span> np.exp(<span class="op">-</span>time <span class="op">**</span> <span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> (<span class="dv">4</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> f)) <span class="op">**</span> <span class="dv">2</span>))</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    fft_wavelet <span class="op">=</span> fft(wavelet, n_convolution)</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convolution for each electrode</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    convres <span class="op">=</span> ifft(fft_wavelet <span class="op">*</span> fft_EEG1, n_convolution)</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    analytic1 <span class="op">=</span> np.reshape(convres[half_wavelet:<span class="op">-</span>half_wavelet], (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>    convres <span class="op">=</span> ifft(fft_wavelet <span class="op">*</span> fft_EEG2, n_convolution)</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>    analytic2 <span class="op">=</span> np.reshape(convres[half_wavelet:<span class="op">-</span>half_wavelet], (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Loop over time points</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ti, tidx <span class="kw">in</span> <span class="bu">enumerate</span>(times2saveidx):</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get analytic signal in the time window around the time point</span></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>        datax <span class="op">=</span> analytic1[tidx <span class="op">-</span> timewindowidx:tidx <span class="op">+</span> timewindowidx <span class="op">+</span> <span class="dv">1</span>, :]</span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>        datay <span class="op">=</span> analytic2[tidx <span class="op">-</span> timewindowidx:tidx <span class="op">+</span> timewindowidx <span class="op">+</span> <span class="dv">1</span>, :]</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compute mutual information for power and phase</span></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>        mi[<span class="dv">0</span>, fi, ti] <span class="op">=</span> mutualinformationx(np.log10(np.<span class="bu">abs</span>(datax)<span class="op">**</span><span class="dv">2</span>), np.log10(np.<span class="bu">abs</span>(datay)<span class="op">**</span><span class="dv">2</span>), fd_bins<span class="op">=</span><span class="dv">50</span>)[<span class="dv">0</span>]</span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>        mi[<span class="dv">1</span>, fi, ti] <span class="op">=</span> mutualinformationx(np.angle(datax), np.angle(datay), fd_bins<span class="op">=</span><span class="dv">20</span>)[<span class="dv">0</span>]</span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compute inter-site phase clustering (ISPC)</span></span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>        ispc[fi, ti] <span class="op">=</span> np.mean(np.<span class="bu">abs</span>(np.mean(np.exp(<span class="ot">1j</span> <span class="op">*</span> (np.angle(datay) <span class="op">-</span> np.angle(datax))), axis<span class="op">=</span><span class="dv">1</span>)), axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compute power correlation (Spearman's rank correlation)</span></span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>        dataxr <span class="op">=</span> rankdata(np.<span class="bu">abs</span>(datax), axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>        datayr <span class="op">=</span> rankdata(np.<span class="bu">abs</span>(datay), axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>        n <span class="op">=</span> timewindowidx<span class="op">*</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span></span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>        powc[fi, ti] <span class="op">=</span> np.mean(<span class="dv">1</span> <span class="op">-</span> <span class="dv">6</span> <span class="op">*</span> np.<span class="bu">sum</span>((dataxr <span class="op">-</span> datayr) <span class="op">**</span> <span class="dv">2</span>, axis<span class="op">=</span><span class="dv">0</span>) <span class="op">/</span> (n <span class="op">*</span> (n <span class="op">**</span> <span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span>)))</span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the results</span></span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">10</span>))</span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot mutual information</span></span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">2</span>, <span class="dv">2</span>, i<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>    plt.contourf(times2save, frex, mi[i, :, :] <span class="op">-</span> np.mean(mi[i, :, baseidx[<span class="dv">0</span>]:baseidx[<span class="dv">1</span>]<span class="op">+</span><span class="dv">1</span>], axis<span class="op">=</span><span class="dv">1</span>)[..., np.newaxis], <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, vmin<span class="op">=-</span><span class="fl">0.075</span>, vmax<span class="op">=</span><span class="fl">0.075</span>)</span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>    plt.yscale(<span class="st">'log'</span>)</span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>    plt.yticks(np.<span class="bu">round</span>(np.logspace(np.log10(frex[<span class="dv">0</span>]), np.log10(frex[<span class="op">-</span><span class="dv">1</span>]), <span class="dv">8</span>)))</span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>    plt.gca().set_yticklabels(np.<span class="bu">round</span>(np.logspace(np.log10(frex[<span class="dv">0</span>]), np.log10(frex[<span class="op">-</span><span class="dv">1</span>]), <span class="dv">8</span>)))</span>
+<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot power correlation</span></span>
+<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>plt.contourf(times2save, frex, powc <span class="op">-</span> np.mean(powc[:, baseidx[<span class="dv">0</span>]:baseidx[<span class="dv">1</span>]<span class="op">+</span><span class="dv">1</span>], axis<span class="op">=</span><span class="dv">1</span>)[..., np.newaxis], <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, vmin<span class="op">=-</span><span class="fl">0.2</span>, vmax<span class="op">=</span><span class="fl">0.2</span>)</span>
+<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a>plt.yscale(<span class="st">'log'</span>)</span>
+<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a>plt.yticks(np.<span class="bu">round</span>(np.logspace(np.log10(frex[<span class="dv">0</span>]), np.log10(frex[<span class="op">-</span><span class="dv">1</span>]), <span class="dv">8</span>)))</span>
+<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a>plt.gca().set_yticklabels(np.<span class="bu">round</span>(np.logspace(np.log10(frex[<span class="dv">0</span>]), np.log10(frex[<span class="op">-</span><span class="dv">1</span>]), <span class="dv">8</span>)))</span>
+<span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot inter-site phase clustering</span></span>
+<span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">4</span>)</span>
+<span id="cb13-76"><a href="#cb13-76" aria-hidden="true" tabindex="-1"></a>plt.contourf(times2save, frex, ispc <span class="op">-</span> np.mean(ispc[:, baseidx[<span class="dv">0</span>]:baseidx[<span class="dv">1</span>]<span class="op">+</span><span class="dv">1</span>], axis<span class="op">=</span><span class="dv">1</span>)[..., np.newaxis], <span class="dv">40</span>, cmap<span class="op">=</span><span class="st">'viridis'</span>, vmin<span class="op">=-</span><span class="fl">0.1</span>, vmax<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb13-77"><a href="#cb13-77" aria-hidden="true" tabindex="-1"></a>plt.yscale(<span class="st">'log'</span>)</span>
+<span id="cb13-78"><a href="#cb13-78" aria-hidden="true" tabindex="-1"></a>plt.yticks(np.<span class="bu">round</span>(np.logspace(np.log10(frex[<span class="dv">0</span>]), np.log10(frex[<span class="op">-</span><span class="dv">1</span>]), <span class="dv">8</span>)))</span>
+<span id="cb13-79"><a href="#cb13-79" aria-hidden="true" tabindex="-1"></a>plt.gca().set_yticklabels(np.<span class="bu">round</span>(np.logspace(np.log10(frex[<span class="dv">0</span>]), np.log10(frex[<span class="op">-</span><span class="dv">1</span>]), <span class="dv">8</span>)))</span>
+<span id="cb13-80"><a href="#cb13-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-81"><a href="#cb13-81" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb13-82"><a href="#cb13-82" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-29.12" class="level3">
+<h3 class="anchored" data-anchor-id="figure-29.12">Figure 29.12</h3>
+<div id="cell-27" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the signals</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="fl">1.0001</span>, <span class="fl">0.0001</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>signal1 <span class="op">=</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">10</span> <span class="op">*</span> time)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>signal2 <span class="op">=</span> <span class="op">-</span>signal1</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Define lags</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>lagz <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">1501</span>, <span class="dv">10</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>milags <span class="op">=</span> np.zeros(<span class="bu">len</span>(lagz))</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mutual information for different lags</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> li, lag <span class="kw">in</span> <span class="bu">enumerate</span>(lagz):</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute mutual information</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    milags[li] <span class="op">=</span> mutualinformationx(signal1, np.roll(signal2, lag), fd_bins<span class="op">=</span><span class="dv">15</span>)[<span class="dv">0</span>]</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot mutual information as a function of lag</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>plt.plot(lagz <span class="op">/</span> (<span class="dv">1</span> <span class="op">/</span> np.mean(np.diff(time))), milags)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Lag (seconds)'</span>)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Mutual information (bits)'</span>)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Now on real data (6 Hz power MI from figure 11)</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Create wavelet and get its FFT</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>], <span class="dv">1</span><span class="op">/</span>EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>fft_wavelet <span class="op">=</span> fft(np.exp(<span class="dv">2</span> <span class="op">*</span> <span class="ot">1j</span> <span class="op">*</span> np.pi <span class="op">*</span> frex[<span class="dv">4</span>] <span class="op">*</span> time) <span class="op">*</span> np.exp(<span class="op">-</span>time <span class="op">**</span> <span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> (<span class="dv">4</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> frex[<span class="dv">4</span>])) <span class="op">**</span> <span class="dv">2</span>)), n_convolution)</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Convolution for each electrode with wavelet</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>convres <span class="op">=</span> ifft(fft_wavelet <span class="op">*</span> fft_EEG1, n_convolution)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>pow1 <span class="op">=</span> np.log10(np.<span class="bu">abs</span>(np.reshape(convres[half_wavelet:<span class="op">-</span>half_wavelet], (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)) <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>convres <span class="op">=</span> ifft(fft_wavelet <span class="op">*</span> fft_EEG2, n_convolution)</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>pow2 <span class="op">=</span> np.log10(np.<span class="bu">abs</span>(np.reshape(convres[half_wavelet:<span class="op">-</span>half_wavelet], (EEG[<span class="st">'pnts'</span>][<span class="dv">0</span>][<span class="dv">0</span>], EEG[<span class="st">'trials'</span>][<span class="dv">0</span>][<span class="dv">0</span>]), <span class="st">'F'</span>)) <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Define lags for real data</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>onecycle <span class="op">=</span> <span class="bu">round</span>(<span class="dv">1000</span> <span class="op">/</span> frex[<span class="dv">4</span>])</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>onecycleidx <span class="op">=</span> <span class="bu">int</span>(onecycle <span class="op">/</span> (<span class="dv">1000</span> <span class="op">/</span> EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>lagz <span class="op">=</span> np.arange(<span class="op">-</span>onecycleidx, onecycleidx <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>milags <span class="op">=</span> np.zeros(<span class="bu">len</span>(lagz))</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mutual information for different lags on real data</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> li, lag <span class="kw">in</span> <span class="bu">enumerate</span>(lagz):</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> lag <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>        milags[li] <span class="op">=</span> mutualinformationx(pow1[:lag, :], pow2[<span class="op">-</span>lag:, :], fd_bins<span class="op">=</span><span class="dv">30</span>)[<span class="dv">0</span>]</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> lag <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>        milags[li] <span class="op">=</span> mutualinformationx(pow1, pow2, fd_bins<span class="op">=</span><span class="dv">30</span>)[<span class="dv">0</span>]</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>        milags[li] <span class="op">=</span> mutualinformationx(pow1[lag:, :], pow2[:<span class="op">-</span>lag, :], fd_bins<span class="op">=</span><span class="dv">30</span>)[<span class="dv">0</span>]</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot mutual information as a function of lag for real data</span></span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>plt.plot(<span class="dv">1000</span> <span class="op">*</span> lagz <span class="op">/</span> EEG[<span class="st">'srate'</span>][<span class="dv">0</span>][<span class="dv">0</span>], milags)</span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="ss">f"</span><span class="sc">{</span>electrodes4mi[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> leads </span><span class="sc">{</span>electrodes4mi[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> ... Lag (ms) ... </span><span class="sc">{</span>electrodes4mi[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> leads </span><span class="sc">{</span>electrodes4mi[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Mutual information (bits)'</span>)</span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span>onecycle, onecycle])</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter29_files/figure-html/cell-14-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/agencyenterprise/AnalyzingNeuralTimeSeries-Python/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

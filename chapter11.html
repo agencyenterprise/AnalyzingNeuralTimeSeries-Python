@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>AnalyzingNeuralTimeSeries-Python - Chapter 11</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="AnalyzingNeuralTimeSeries-Python - Chapter 11">
+<meta property="og:description" content="Python Implementation of Code for ANTS book (Cohen, 2012, MIT Press)">
+<meta property="og:site_name" content="AnalyzingNeuralTimeSeries-Python">
+<meta name="twitter:title" content="AnalyzingNeuralTimeSeries-Python - Chapter 11">
+<meta name="twitter:description" content="Python Implementation of Code for ANTS book (Cohen, 2012, MIT Press)">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">AnalyzingNeuralTimeSeries-Python</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter11.html">Chapter 11</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyzing Neural Time Series Data: Theory and Practice - Python Implementation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 2</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4a</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4b</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4c</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 5</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 6</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 9</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 10</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Chapter 11</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 12</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 13</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 14</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 15</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 16</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 17</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 18</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 19</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 20</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter22.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 22</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter23.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 23</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter25.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 25</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter26.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 26</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter27.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 27</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter28.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 28</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter29.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 29</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter30.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 30</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter31.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 31</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter33.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 33</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter34.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 34</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#analyzing-neural-time-series-data" id="toc-analyzing-neural-time-series-data" class="nav-link active" data-scroll-target="#analyzing-neural-time-series-data">Analyzing Neural Time Series Data</a></li>
+  <li><a href="#import-necessary-libraries" id="toc-import-necessary-libraries" class="nav-link" data-scroll-target="#import-necessary-libraries">Import necessary libraries</a></li>
+  <li><a href="#figure-11.1" id="toc-figure-11.1" class="nav-link" data-scroll-target="#figure-11.1">Figure 11.1</a></li>
+  <li><a href="#figure-11.2" id="toc-figure-11.2" class="nav-link" data-scroll-target="#figure-11.2">Figure 11.2</a></li>
+  <li><a href="#figure-11.3" id="toc-figure-11.3" class="nav-link" data-scroll-target="#figure-11.3">Figure 11.3</a></li>
+  <li><a href="#figure-11.4" id="toc-figure-11.4" class="nav-link" data-scroll-target="#figure-11.4">Figure 11.4</a></li>
+  <li><a href="#figure-11.5" id="toc-figure-11.5" class="nav-link" data-scroll-target="#figure-11.5">Figure 11.5</a></li>
+  <li><a href="#figure-11.6" id="toc-figure-11.6" class="nav-link" data-scroll-target="#figure-11.6">Figure 11.6</a></li>
+  <li><a href="#figure-11.7" id="toc-figure-11.7" class="nav-link" data-scroll-target="#figure-11.7">Figure 11.7</a></li>
+  <li><a href="#figure-11.9" id="toc-figure-11.9" class="nav-link" data-scroll-target="#figure-11.9">Figure 11.9</a></li>
+  <li><a href="#figure-11.10" id="toc-figure-11.10" class="nav-link" data-scroll-target="#figure-11.10">Figure 11.10</a></li>
+  <li><a href="#figure-11.11" id="toc-figure-11.11" class="nav-link" data-scroll-target="#figure-11.11">Figure 11.11</a></li>
+  <li><a href="#figure-11.12" id="toc-figure-11.12" class="nav-link" data-scroll-target="#figure-11.12">Figure 11.12</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/agencyenterprise/AnalyzingNeuralTimeSeries-Python/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Chapter 11</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="chapter-11" class="level4">
+<h4 class="anchored" data-anchor-id="chapter-11">Chapter 11</h4>
+</section>
+<section id="analyzing-neural-time-series-data" class="level3">
+<h3 class="anchored" data-anchor-id="analyzing-neural-time-series-data">Analyzing Neural Time Series Data</h3>
+<p>Python code for Chapter 11 – converted from original Matlab by AE Studio (and ChatGPT)<br>
+Original Matlab code by Mike X Cohen</p>
+<p>This code accompanies the book, titled “Analyzing Neural Time Series Data” (MIT Press).<br>
+Using the code without following the book may lead to confusion, incorrect data analyses, and misinterpretations of results.<br>
+Mike X Cohen and AE Studio assume no responsibility for inappropriate or incorrect use of this code.</p>
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+</section>
+<section id="import-necessary-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="import-necessary-libraries">Import necessary libraries</h3>
+<div id="cell-3" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.fft <span class="im">import</span> fft, ifft</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.io <span class="im">import</span> loadmat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="figure-11.1" class="level3">
+<h3 class="anchored" data-anchor-id="figure-11.1">Figure 11.1</h3>
+<div id="cell-5" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameters</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>srate <span class="op">=</span> <span class="dv">1000</span>  <span class="co"># sampling rate of 1 kHz</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span><span class="op">+</span><span class="dv">1</span><span class="op">/</span>srate, <span class="dv">1</span><span class="op">/</span>srate)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>freq <span class="op">=</span> <span class="dv">10</span>  <span class="co"># in Hz</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>amp <span class="op">=</span> <span class="dv">2</span>  <span class="co"># amplitude, or height of the sine wave</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create sine wave</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>sine_wave <span class="op">=</span> amp <span class="op">*</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> freq <span class="op">*</span> time)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot sine wave</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>plt.plot(time, sine_wave)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>])  <span class="co"># this adjusts the y-axis limits for visibility</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'My first sine wave!'</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-11.2" class="level3">
+<h3 class="anchored" data-anchor-id="figure-11.2">Figure 11.2</h3>
+<div id="cell-7" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a sampling rate</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>srate <span class="op">=</span> <span class="dv">500</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># List some frequencies</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>frex <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">35</span>]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># List some random amplitudes</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>amplit <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">7</span>]</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Phases</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>phases <span class="op">=</span> [np.pi<span class="op">/</span><span class="dv">7</span>, np.pi<span class="op">/</span><span class="dv">8</span>, np.pi, np.pi<span class="op">/</span><span class="dv">2</span>, <span class="op">-</span>np.pi<span class="op">/</span><span class="dv">4</span>]</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Define time</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span><span class="op">+</span><span class="dv">1</span><span class="op">/</span>srate, <span class="dv">1</span><span class="op">/</span>srate)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through frequencies and create sine waves</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>sine_waves <span class="op">=</span> np.zeros((<span class="bu">len</span>(frex), <span class="bu">len</span>(time)))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(frex)):</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    sine_waves[fi, :] <span class="op">=</span> amplit[fi] <span class="op">*</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> frex[fi] <span class="op">*</span> time <span class="op">+</span> phases[fi])</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot each wave separately</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(frex)):</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="bu">len</span>(frex), <span class="dv">1</span>, fi<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    plt.plot(sine_waves[fi, :], linewidth<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    plt.axis([<span class="dv">0</span>, <span class="bu">len</span>(time), <span class="op">-</span><span class="bu">max</span>(amplit), <span class="bu">max</span>(amplit)])</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the result</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>plt.plot(np.<span class="bu">sum</span>(sine_waves, axis<span class="op">=</span><span class="dv">0</span>))</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>plt.gca().autoscale(enable<span class="op">=</span><span class="va">True</span>, axis<span class="op">=</span><span class="st">'both'</span>, tight<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'sum of sine waves'</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-4-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-11.3" class="level3">
+<h3 class="anchored" data-anchor-id="figure-11.3">Figure 11.3</h3>
+<div id="cell-9" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot sum of sine waves plus random noise</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plt.plot(np.<span class="bu">sum</span>(sine_waves <span class="op">+</span> <span class="dv">5</span> <span class="op">*</span> np.random.randn(<span class="op">*</span>sine_waves.shape), axis<span class="op">=</span><span class="dv">0</span>))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>plt.axis([<span class="dv">0</span>, <span class="dv">1020</span>, <span class="op">-</span><span class="dv">40</span>, <span class="dv">50</span>])  <span class="co"># this sets the x-axis and y-axis limits</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'sum of sine waves plus white noise'</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-11.4" class="level3">
+<h3 class="anchored" data-anchor-id="figure-11.4">Figure 11.4</h3>
+<div id="cell-11" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span><span class="op">+</span><span class="dv">1</span><span class="op">/</span>srate, <span class="dv">1</span><span class="op">/</span>srate)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create three sine waves</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>s1 <span class="op">=</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">3</span> <span class="op">*</span> time)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>s2 <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">8</span> <span class="op">*</span> time)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>s3 <span class="op">=</span> s1 <span class="op">+</span> s2</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the sine waves</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, s <span class="kw">in</span> <span class="bu">enumerate</span>([s1, s2, s3], <span class="dv">1</span>):</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">2</span>, <span class="dv">3</span>, i)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    plt.plot(time, s)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    plt.xlim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    plt.ylim([<span class="op">-</span><span class="fl">1.6</span>, <span class="fl">1.6</span>])</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    plt.yticks(np.arange(<span class="op">-</span><span class="fl">1.5</span>, <span class="dv">2</span>, <span class="fl">0.5</span>))</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot power</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">2</span>, <span class="dv">3</span>, i<span class="op">+</span><span class="dv">3</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> fft(s) <span class="op">/</span> <span class="bu">len</span>(time)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    hz <span class="op">=</span> np.linspace(<span class="dv">0</span>, srate<span class="op">/</span><span class="dv">2</span>, <span class="bu">int</span>(np.floor(<span class="bu">len</span>(time)<span class="op">/</span><span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    plt.bar(hz, np.<span class="bu">abs</span>(f[:<span class="bu">len</span>(hz)]) <span class="op">*</span> <span class="dv">2</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    plt.xlim([<span class="dv">0</span>, <span class="dv">11</span>])</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    plt.ylim([<span class="dv">0</span>, <span class="fl">1.2</span>])</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    plt.xticks(np.arange(<span class="dv">0</span>, <span class="dv">11</span>))</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-11.5" class="level3">
+<h3 class="anchored" data-anchor-id="figure-11.5">Figure 11.5</h3>
+<div id="cell-13" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Length of sequence</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Random numbers</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> np.random.randn(N)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Sampling rate in Hz</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>srate <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Nyquist frequency</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>nyquist <span class="op">=</span> srate <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize Fourier output matrix</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>fourier <span class="op">=</span> np.zeros(N, dtype<span class="op">=</span><span class="bu">complex</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Frequencies in Hz</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>frequencies <span class="op">=</span> np.linspace(<span class="dv">0</span>, nyquist, N<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Time</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(N) <span class="op">/</span> N</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Fourier transform is dot-product between sine wave and data at each frequency</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    sine_wave <span class="op">=</span> np.exp(<span class="op">-</span><span class="ot">1j</span> <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> (fi) <span class="op">*</span> time)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    fourier[fi] <span class="op">=</span> np.<span class="bu">sum</span>(sine_wave <span class="op">*</span> data)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>fourier <span class="op">=</span> fourier <span class="op">/</span> N</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> fig.add_subplot(<span class="dv">221</span>)</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>ax1.plot(data, <span class="st">'-o'</span>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>ax1.set_xlim([<span class="op">-</span><span class="dv">1</span>, N])</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'Time domain representation of the data'</span>)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> fig.add_subplot(<span class="dv">222</span>, projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>ax2.plot3D(frequencies, np.angle(fourier[:N<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>]), np.<span class="bu">abs</span>(fourier[:N<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>])<span class="op">**</span><span class="dv">2</span>, <span class="st">'-o'</span>, linewidth<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>ax2.grid(<span class="va">True</span>)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>ax2.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="st">'Phase'</span>)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>ax2.set_zlabel(<span class="st">'Power'</span>)</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">'3-D representation of the Fourier transform'</span>)</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>ax3 <span class="op">=</span> fig.add_subplot(<span class="dv">223</span>)</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>ax3.bar(frequencies, np.<span class="bu">abs</span>(fourier[:N<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>])<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>ax3.set_xlim([<span class="op">-</span><span class="dv">5</span>, <span class="dv">105</span>])</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>ax3.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>ax3.set_ylabel(<span class="st">'Power'</span>)</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>ax3.set_title(<span class="st">'Power spectrum derived from discrete Fourier transform'</span>)</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>ax4 <span class="op">=</span> fig.add_subplot(<span class="dv">224</span>)</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>ax4.bar(frequencies, np.angle(fourier[:N<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>]))</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>ax4.set_xlim([<span class="op">-</span><span class="dv">5</span>, <span class="dv">105</span>])</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>ax4.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>ax4.set_ylabel(<span class="st">'Phase angle'</span>)</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>ax4.set_yticks(np.arange(<span class="op">-</span>np.pi, np.pi, np.pi<span class="op">/</span><span class="dv">2</span>))</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>ax4.set_title(<span class="st">'Phase spectrum derived from discrete Fourier transform'</span>)</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-11.6" class="level3">
+<h3 class="anchored" data-anchor-id="figure-11.6">Figure 11.6</h3>
+<div id="cell-15" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute sine waves and sum to recover the original time series</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>reconstructed_data <span class="op">=</span> np.zeros(N)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    sine_wave <span class="op">=</span> fourier[fi] <span class="op">*</span> np.exp(<span class="ot">1j</span> <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> (fi) <span class="op">*</span> time)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    reconstructed_data <span class="op">+=</span> np.real(sine_wave)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot original and reconstructed data</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>plt.plot(data, <span class="st">'-o'</span>, label<span class="op">=</span><span class="st">'original data'</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>plt.plot(reconstructed_data, <span class="st">'r-*'</span>, label<span class="op">=</span><span class="st">'inverse Fourier transform data'</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, N<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-11.7" class="level3">
+<h3 class="anchored" data-anchor-id="figure-11.7">Figure 11.7</h3>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform FFT</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>fft_data <span class="op">=</span> fft(data) <span class="op">/</span> N</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">18</span>, <span class="dv">6</span>))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">131</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>plt.plot(frequencies, np.<span class="bu">abs</span>(fourier[:N<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>])<span class="op">**</span><span class="dv">2</span>, <span class="st">'*-'</span>, label<span class="op">=</span><span class="st">'time-domain Fourier'</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>plt.plot(frequencies, np.<span class="bu">abs</span>(fft_data[:N<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>])<span class="op">**</span><span class="dv">2</span>, <span class="st">'ro-'</span>, markersize<span class="op">=</span><span class="dv">8</span>, label<span class="op">=</span><span class="st">'FFT'</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Power'</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Power spectrum derived from discrete Fourier transform and from FFT'</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">132</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>plt.plot(frequencies, np.angle(fourier[:N<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>]), <span class="st">'*-'</span>, label<span class="op">=</span><span class="st">'time-domain Fourier'</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>plt.plot(frequencies, np.angle(fft_data[:N<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>]), <span class="st">'ro-'</span>, markersize<span class="op">=</span><span class="dv">8</span>, label<span class="op">=</span><span class="st">'FFT'</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Phase'</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>plt.yticks(np.arange(<span class="op">-</span>np.pi, np.pi<span class="op">+</span><span class="dv">1</span>, np.pi<span class="op">/</span><span class="dv">2</span>))</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Phase spectrum derived from discrete Fourier transform and from FFT'</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">133</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>plt.plot(reconstructed_data, <span class="st">'*-'</span>, label<span class="op">=</span><span class="st">'Manual inverse Fourier transform'</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>plt.plot(np.real(ifft(fft(data))), <span class="st">'ro-'</span>, markersize<span class="op">=</span><span class="dv">8</span>, label<span class="op">=</span><span class="st">'ifft'</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time'</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Amplitude'</span>)</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Manual inverse Fourier transform and ifft'</span>)</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-11.9" class="level3">
+<h3 class="anchored" data-anchor-id="figure-11.9">Figure 11.9</h3>
+<div id="cell-19" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List some frequencies</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>frex <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">7</span>]</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># List some random amplitudes</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>amplit <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">5</span>]</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Phases</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>phases <span class="op">=</span> [np.pi<span class="op">/</span><span class="dv">7</span>, np.pi<span class="op">/</span><span class="dv">8</span>, np.pi, np.pi<span class="op">/</span><span class="dv">2</span>]</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a time series of sequenced sine waves</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>srate <span class="op">=</span> <span class="dv">500</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span><span class="op">+</span><span class="dv">1</span><span class="op">/</span>srate, <span class="dv">1</span><span class="op">/</span>srate)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>stationary <span class="op">=</span> np.zeros(<span class="bu">len</span>(time) <span class="op">*</span> <span class="bu">len</span>(frex))</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>nonstationary <span class="op">=</span> np.zeros(<span class="bu">len</span>(time) <span class="op">*</span> <span class="bu">len</span>(frex))</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(frex)):</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    temp_sine_wave <span class="op">=</span> amplit[fi] <span class="op">*</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> frex[fi] <span class="op">*</span> time <span class="op">+</span> phases[fi])</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    stationary <span class="op">+=</span> np.tile(temp_sine_wave, <span class="bu">len</span>(frex))</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    temp_sine_wave <span class="op">*=</span> (time <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    start_idx <span class="op">=</span> fi <span class="op">*</span> <span class="bu">len</span>(time)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    stop_idx <span class="op">=</span> start_idx <span class="op">+</span> <span class="bu">len</span>(time)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    nonstationary[start_idx:stop_idx] <span class="op">=</span> temp_sine_wave</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot stationary and non-stationary signals</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">221</span>)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>plt.plot(stationary, <span class="st">'r'</span>)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">1</span>, <span class="bu">len</span>(stationary)])</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'stationary signal'</span>)</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">222</span>)</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>plt.plot(nonstationary)</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">1</span>, <span class="bu">len</span>(nonstationary)])</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'non-stationary signal'</span>)</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform FFT and plot</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>frequencies <span class="op">=</span> np.linspace(<span class="dv">0</span>, srate<span class="op">/</span><span class="dv">2</span>, <span class="bu">len</span>(nonstationary)<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>fft_nonstationary <span class="op">=</span> fft(nonstationary) <span class="op">/</span> <span class="bu">len</span>(nonstationary)</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>fft_stationary <span class="op">=</span> fft(stationary) <span class="op">/</span> <span class="bu">len</span>(stationary)</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>plt.plot(frequencies, np.<span class="bu">abs</span>(fft_stationary[:<span class="bu">len</span>(frequencies)])<span class="op">*</span><span class="dv">2</span>, <span class="st">'r'</span>, label<span class="op">=</span><span class="st">'Power stationary'</span>)</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>plt.plot(frequencies, np.<span class="bu">abs</span>(fft_nonstationary[:<span class="bu">len</span>(frequencies)])<span class="op">*</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Power non-stationary'</span>)</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="bu">max</span>(frex)<span class="op">*</span><span class="dv">2</span>])</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-11.10" class="level3">
+<h3 class="anchored" data-anchor-id="figure-11.10">Figure 11.10</h3>
+<div id="cell-21" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load sample EEG data</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>EEG <span class="op">=</span> loadmat(<span class="st">'../data/sampleEEGdata.mat'</span>)[<span class="st">"EEG"</span>][<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>eegdat4convol <span class="op">=</span> EEG[<span class="st">"data"</span>][<span class="dv">46</span>, :, <span class="dv">0</span>]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>srate <span class="op">=</span> EEG[<span class="st">"srate"</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Gaussian</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span><span class="op">+</span><span class="dv">1</span><span class="op">/</span>srate, <span class="dv">1</span><span class="op">/</span>srate)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="dv">5</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">30</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>gaussian <span class="op">=</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> s<span class="op">**</span><span class="dv">2</span>)) <span class="op">/</span> <span class="dv">30</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot EEG data and Gaussian</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">211</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>plt.plot(eegdat4convol)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>plt.plot(gaussian)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot convolution results</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">211</span>)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>plt.plot(np.convolve(eegdat4convol, gaussian, <span class="st">'same'</span>))</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>plt.plot(np.<span class="bu">abs</span>(fft(np.convolve(eegdat4convol, gaussian, <span class="st">'same'</span>))))</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot FFT results</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">211</span>)</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>plt.plot(np.<span class="bu">abs</span>(fft(eegdat4convol)))</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>plt.plot(np.<span class="bu">abs</span>(fft(gaussian)))</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-11-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-11-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-11.11" class="level3">
+<h3 class="anchored" data-anchor-id="figure-11.11">Figure 11.11</h3>
+<div id="cell-23" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameters</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>srate <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="dv">1</span><span class="op">/</span>srate)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>fg <span class="op">=</span> [<span class="dv">15</span>, <span class="dv">5</span>]</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> f <span class="op">*</span> time)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over Gaussian widths</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    g <span class="op">=</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> (<span class="dv">4</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> fg[i])<span class="op">**</span><span class="dv">2</span>))) <span class="op">/</span> fg[i]</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">411</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    plt.plot(time, s)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">'Sine wave (signal)'</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    plt.xlim([<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>])</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    plt.ylim([<span class="op">-</span><span class="fl">1.1</span>, <span class="fl">1.1</span>])</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">412</span>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    plt.plot(time, g)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    plt.xlim([<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>])</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">'Gaussian (kernel)'</span>)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">413</span>)</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    plt.plot(time, np.convolve(s, g, <span class="st">'same'</span>))</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    plt.xlim([<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>])</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    plt.ylim([<span class="op">-</span><span class="fl">1.1</span>, <span class="fl">1.1</span>])</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">'result of convolution'</span>)</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">427</span>)</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>    fft_s <span class="op">=</span> np.<span class="bu">abs</span>(fft(s))</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    fft_s <span class="op">=</span> fft_s[:<span class="bu">len</span>(fft_s)<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>] <span class="op">/</span> np.<span class="bu">max</span>(fft_s[:<span class="bu">len</span>(fft_s)<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>])</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    plt.bar(np.arange(<span class="dv">501</span>), fft_s, color<span class="op">=</span><span class="st">'r'</span>)</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>    fft_g <span class="op">=</span> np.<span class="bu">abs</span>(fft(g))</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>    fft_g <span class="op">=</span> fft_g[:<span class="bu">len</span>(fft_g)<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>] <span class="op">/</span> np.<span class="bu">max</span>(fft_g[:<span class="bu">len</span>(fft_g)<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>])</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>    plt.plot(np.arange(<span class="dv">501</span>), fft_g)</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    plt.xlim([<span class="dv">0</span>, <span class="dv">40</span>])</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    plt.ylim([<span class="dv">0</span>, <span class="fl">1.05</span>])</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">'individual power spectra'</span>)</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">428</span>)</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>    plt.bar(np.arange(<span class="dv">501</span>), fft_g <span class="op">*</span> fft_s)</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>    plt.xlim([<span class="dv">0</span>, <span class="dv">40</span>])</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>    plt.ylim([<span class="dv">0</span>, <span class="fl">0.035</span>])</span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">'multiplied power spectra'</span>)</span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-12-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-11.12" class="level3">
+<h3 class="anchored" data-anchor-id="figure-11.12">Figure 11.12</h3>
+<div id="cell-25" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> EEG[<span class="st">"times"</span>][<span class="dv">0</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>srate <span class="op">=</span> EEG[<span class="st">"srate"</span>][<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Gaussian</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span><span class="op">+</span><span class="dv">1</span><span class="op">/</span>srate, <span class="dv">1</span><span class="op">/</span>srate)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="dv">5</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">30</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>gaussian <span class="op">=</span> np.exp(<span class="op">-</span>time<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> s<span class="op">**</span><span class="dv">2</span>)) <span class="op">/</span> <span class="dv">30</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot EEG data, Gaussian, and result of convolution</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">411</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>plt.plot(times, eegdat4convol)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="dv">1000</span>, <span class="dv">1500</span>])</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">412</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>plt.plot(time, gaussian)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">413</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>plt.plot(times, eegdat4convol, <span class="st">'r'</span>)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>plt.plot(times, np.convolve(eegdat4convol, gaussian, <span class="st">'same'</span>))</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="op">-</span><span class="dv">1000</span>, <span class="dv">1500</span>])</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>nfft <span class="op">=</span> <span class="bu">len</span>(eegdat4convol)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>fft_s <span class="op">=</span> np.<span class="bu">abs</span>(fft(eegdat4convol, nfft))</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>fft_s <span class="op">=</span> fft_s[:nfft<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>]</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> np.linspace(<span class="dv">0</span>, srate<span class="op">/</span><span class="dv">2</span>, nfft<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">427</span>)</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>plt.plot(f, fft_s <span class="op">/</span> np.<span class="bu">max</span>(fft_s), <span class="st">'r'</span>)</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>fft_g <span class="op">=</span> np.<span class="bu">abs</span>(fft(gaussian, nfft))</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>fft_g <span class="op">=</span> fft_g[:nfft<span class="op">//</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>]</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>plt.plot(f, fft_g <span class="op">/</span> np.<span class="bu">max</span>(fft_g))</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">60</span>])</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">428</span>)</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>plt.plot(f, fft_s <span class="op">*</span> fft_g)</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">60</span>])</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter11_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/agencyenterprise/AnalyzingNeuralTimeSeries-Python/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
